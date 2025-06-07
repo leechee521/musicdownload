@@ -18,13 +18,13 @@
     <el-container>
         <el-header class="header">
             <el-col :span="4">
-                <el-button @click="newDownload" icon="el-icon-plus" circle></el-button>
+                <el-button @click="mean_drawer = !mean_drawer" icon="el-icon-menu" circle></el-button>
             </el-col>
             <el-col :span="16" class="header title">
                 主页
             </el-col>
             <el-col :span="4">
-                <el-button @click="showCookieDialog = true" icon="el-icon-setting" circle></el-button>
+                <el-button @click="newDownload" icon="el-icon-plus" circle></el-button>
             </el-col>
         </el-header>
         <el-main class="content">
@@ -60,7 +60,7 @@
                         </el-col>
                     </el-row>
                 </el-card>
-                <div v-show="contentFlat" v-loading="card_loading">
+                <div v-show="contentFlat" v-loading="card_loading" style="height:100%">
                     <el-row :gutter="20">
                         <el-col :span="topList.length > 4 ? 6 : 24/topList.length"
                                 :md="topList.length > 4 ? 6 : 24/topList.length"
@@ -69,7 +69,7 @@
                                 v-for="item in topList"
                                 :key="item.title">
                             <el-card class="my_card">
-                                <div slot="header" class="clearfix" >
+                                <div slot="header" class="clearfix">
                                     <span>{{item.title}}</span>
                                     <el-button style="float: right; padding: 3px 0" type="text">查看更多</el-button>
                                 </div>
@@ -303,6 +303,36 @@
             </div>
         </el-main>
     </el-container>
+    <el-drawer
+            size="130px"
+            direction="ltr"
+            :modal="false"
+            :visible.sync="mean_drawer"
+            :with-header="false">
+        <el-menu default-active="1" class="el-menu-vertical-demo"
+        >
+            <el-menu-item index="1" style="padding-left: 10px;padding-right: 0;" @click="toPage('/')">
+                <i class="el-icon-setting"></i>
+                <span slot="title">主页</span>
+            </el-menu-item>
+            <el-menu-item index="2" style="padding-left: 10px;padding-right: 0;" @click="get_top_list('qq')">
+                <i class="el-icon-setting"></i>
+                <span slot="title">QQ音乐</span>
+            </el-menu-item>
+            <el-menu-item index="3" style="padding-left: 10px;padding-right: 0;" @click="get_top_list('wyy')">
+                <i class="el-icon-setting"></i>
+                <span slot="title">网易云音乐</span>
+            </el-menu-item>
+            <el-menu-item index="4" style="padding-left: 10px;padding-right: 0;">
+                <i class="el-icon-setting"></i>
+                <span slot="title">酷狗音乐</span>
+            </el-menu-item>
+            <el-menu-item index="5" style="padding-left: 10px;padding-right: 0;">
+                <i class="el-icon-setting"></i>
+                <span slot="title">酷我音乐</span>
+            </el-menu-item>
+        </el-menu>
+    </el-drawer>
 </div>
 <script src="../static/js/app.js"></script>
 </body>

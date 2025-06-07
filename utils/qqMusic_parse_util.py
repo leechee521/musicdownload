@@ -6,6 +6,8 @@ import re
 import requests
 from flask import current_app
 
+from entity.song_info_entity import SongInfo
+from utils.artist_uril import getArtists
 from utils.config_util import cookie_Config
 from utils.lrc_util import merge_lyrics
 from utils.time_util import sft
@@ -263,8 +265,9 @@ def get_song(song_num, playlistid):
     response = requests.post('https://u.y.qq.com/cgi-bin/musicu.fcg', headers=headers, data=json.dumps(data))
     json_txt = json.loads(response.text)
     songs = json_txt["req_0"]["data"]["songlist"]
-
-    return songs
+    playlist_title = json_txt["req_0"]["data"]['dirinfo']['title']
+    playlist_id = json_txt["req_0"]["data"]['dirinfo']['id']
+    return playlist_id, playlist_title, songs
 
 
 def get_qq_top_list(id, num):
@@ -278,14 +281,21 @@ def get_qq_top_list(id, num):
     songInfoList = json_text["songInfoList"]
     top_list = []
     for item in songInfoList[0:num]:
-        artist_name = []
-        for artist in item['singer']:
-            artist_name.append(artist['name'])
-        artists = ','.join(artist_name)
+        artists = getArtists(item['singer'])
         album_mid = item["album"]["mid"]
         cover = f"https://y.qq.com/music/photo_new/T002R800x800M000{album_mid}.jpg?max_age=2592000"
-        top_list.append({"id": item["mid"], "name": item["name"], "album": item["album"]["name"], "artists": artists,
-                         "url": None, "cover": cover})
+        song = SongInfo(
+            id=item["mid"],
+            title=item["name"],
+            artist=artists,
+            album=item["album"]["name"],
+            duration=None,
+            source="qq",
+            cover_url=cover,
+            url=None,
+            lyric=None
+        )
+        top_list.append(song)
 
     return top_list
 

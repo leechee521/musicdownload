@@ -7,25 +7,49 @@ from utils.wyyMusic_parse_util import get_wyy_top_list
 
 top_list_bp = Blueprint('top_list_router', __name__, url_prefix='/top_list')
 
+wyy_list = [
+    {"name": "网易云-热歌榜", "id": 3778678},
+    {"name": "网易云-新歌榜", "id": 3779629},
+    {"name": "网易云-飙升榜", "id": 19723756}
+]
+qq_list = [
+    {"name": "QQ音乐-热歌榜", "id": 26},
+    {"name": "QQ音乐-新歌榜", "id": 27},
+    {"name": "QQ音乐-飙升榜", "id": 62},
+    {"name": "QQ音乐-流行榜", "id": 4},
+    {"name": "QQ音乐-听歌识曲榜", "id": 67}
+]
 
-@top_list_bp.route('/', methods=['GET'])
-def get_top_list():
+
+@top_list_bp.route('/wyy', methods=['GET'])
+def get_wyy_list():
     data = []
     # 获取网易云热门歌单
-    wyy_top_list = get_wyy_top_list(3778678, 10)
-    data.append(SongTopList.from_dict({"source": "wyy", "title": "网易云-热歌榜", "songs": wyy_top_list}))
-    wyy_new_list = get_wyy_top_list(3779629, 10)
-    data.append(SongTopList.from_dict({"source": "wyy", "title": "网易云-新歌榜", "songs": wyy_new_list}))
-    wyy_bs_list = get_wyy_top_list(19723756, 10)
-    data.append(SongTopList.from_dict({"source": "wyy", "title": "网易云-飙升榜", "songs": wyy_bs_list}))
-    # qq_top_list = get_qq_top_list(26, 10)
-    # data.append({"source": "qq", "title": "QQ音乐-热歌榜", "song_list": qq_top_list})
-    # qq_popular_list = get_qq_top_list(4, 10)
-    # data.append({"source": "qq", "title": "QQ音乐-流行榜", "song_list": qq_popular_list})
-    # qq_bs_list = get_qq_top_list(62, 10)
-    # data.append({"source": "qq", "title": "QQ音乐-飙升榜", "song_list": qq_bs_list})
-    # qq_tgsq_list = get_qq_top_list(67, 10)
-    # data.append({"source": "qq", "title": "QQ音乐-听歌识曲榜", "song_list": qq_tgsq_list})
-    # qq_new_list = get_qq_top_list(27, 10)
-    # data.append({"source": "qq", "title": "QQ音乐-新歌榜", "song_list": qq_new_list})
+    for item in wyy_list:
+        data.append(
+            SongTopList.from_dict({"source": "wyy", "title": item["name"], "songs": get_wyy_top_list(item["id"], 10)}))
+    return jsonify(MyResponse.ok("获取成功", data=data)), 200
+
+
+@top_list_bp.route('/qq', methods=['GET'])
+def get_qq_list():
+    data = []
+    for item in qq_list:
+        data.append({"source": "qq", "title": item["name"], "songs": get_qq_top_list(item["id"], 10)})
+    return jsonify(MyResponse.ok("获取成功", data=data)), 200
+
+
+@top_list_bp.route('/kugou', methods=['GET'])
+def get_kugou_list():
+    data = []
+    for item in qq_list:
+        data.append({"source": "qq", "title": item["name"], "songs": get_qq_top_list(item["id"], 10)})
+    return jsonify(MyResponse.ok("获取成功", data=data)), 200
+
+
+@top_list_bp.route('/kuwo', methods=['GET'])
+def get_kuwo_list():
+    data = []
+    for item in qq_list:
+        data.append({"source": "qq", "title": item["name"], "songs": get_qq_top_list(item["id"], 10)})
     return jsonify(MyResponse.ok("获取成功", data=data)), 200

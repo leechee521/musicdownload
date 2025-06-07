@@ -1,6 +1,6 @@
 from flask import request, jsonify, Blueprint, current_app, render_template
 
-from utils import url_util
+from server.download_server import parse_url
 
 download_bp = Blueprint("download_router", __name__)
 
@@ -19,5 +19,5 @@ def download():
     if not level:
         return jsonify({"msg": "level 参数是必需的"}), 400
     current_app.logger.info(f"{url}正在解析下载")
-    url_util.parse_url(url, level)
+    parse_url(url, level)
     return jsonify({"msg": "下载成功"}), 200

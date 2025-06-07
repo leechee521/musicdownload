@@ -1,5 +1,6 @@
 from flask import render_template, Blueprint, current_app, jsonify
 
+
 home_bp = Blueprint('home_router', __name__)
 
 

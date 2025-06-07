@@ -55,6 +55,8 @@ def compress_image_if_needed(image_path, max_size_bytes=16 * 1024 * 1024 - 1024)
     except Exception as e:
         current_app.logger.info(f"图片压缩失败: {e}")
         return None
+
+
 def update_flac_metadata(file_path, title=None, artist=None, album=None, lyrics=None, cover_path=None):
     """
     更新 FLAC 文件的元数据，包括标题、艺术家、专辑、歌词和封面。
@@ -155,6 +157,11 @@ def update_mp3_metadata(file_path, title=None, artist=None, album=None, lyrics=N
 
         # 保存更改
         audio.save(file_path)
+        # 删除临时封面文件
+        try:
+            os.remove(cover_path)
+        except OSError as e:
+            current_app.logger.info(f"删除临时封面文件失败: {e}")
         return True
 
     except Exception as e:

@@ -18,8 +18,9 @@ document.addEventListener('DOMContentLoaded', function () {
             currentPage: 1,
             pageSize: 20,
             total: 0,
-            card_loading: true,
-            playerWindow: null
+            card_loading: false,
+            playerWindow: null,
+            mean_drawer: false,
         },
         methods: {
             openSong(song) {
@@ -128,9 +129,9 @@ document.addEventListener('DOMContentLoaded', function () {
             handleImageError(e) {
                 e.target.src = '../static/images/notFoundImage.png';
             },
-            get_top_list() {
+            get_top_list(source) {
                 this.card_loading = true
-                fetch("/top_list", {
+                fetch("/top_list/" + source, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -149,11 +150,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 }).finally(() => {
                     this.card_loading = false
                 })
+            },
+            toPage(page) {
+                window.location.href = page
             }
-
         },
         mounted() {
-            this.get_top_list()
         }
     })
 })

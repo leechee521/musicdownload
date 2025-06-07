@@ -53,6 +53,9 @@ app.config.from_object(flask_env)
 socketio.init_app(app)
 db.init_app(app)
 
+with app.app_context():
+    db.create_all()
+
 app.register_blueprint(
     home_bp,
     url_prefix='/home',

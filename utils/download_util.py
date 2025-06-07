@@ -1,4 +1,3 @@
-# todo 如果qq音乐下载不成功，就去网易云音乐下载，反之网易云没有版权就去qq音乐查找。
 import os
 import uuid
 
