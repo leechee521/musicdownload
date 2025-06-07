@@ -249,7 +249,8 @@
                     <p>暂无搜索结果</p>
                 </div>
 
-                <div v-else class="mobile-only">
+                <div v-else class="mobile-only" v-infinite-scroll="loadData"
+                     style="overflow:auto;height: calc(100vh - 220px)">
                     <div v-for="(item, index) in results" :key="index" class="mobile-card">
                         <div class="mobile-card-content">
                             <img :src="item.cover" class="mobile-card-cover" @error="handleImageError">

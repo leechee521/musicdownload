@@ -10,82 +10,339 @@
     <!-- 引入 Vue 和 Element UI JS -->
     <script src="../static/js/vue.js"></script>
     <script src="../static/js/index.js"></script>
+    <!-- 引入字体图标 -->
+    <link rel="stylesheet" href="../static/css/all.min.css">
+<!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css">-->
     <style>
-        .player-container {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            min-height: 100vh;
             padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .player-header {
             text-align: center;
+            margin-bottom: 20px;
         }
-        .now-playing {
-            font-size: 1.2em;
-            margin: 20px 0;
-            color: #333;
+
+        .player-header h1 {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 10px;
         }
-        .audio-controls {
+
+        .cover-container {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: rotate 20s linear infinite;
+            animation-play-state: paused;
+        }
+
+        .cover-container.playing {
+            animation-play-state: running;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .cover-img {
             width: 100%;
-            max-width: 400px;
-            margin: 20px auto;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .song-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .song-title {
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .song-artist {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .progress-container {
+            margin-bottom: 20px;
+        }
+
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 5px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            margin: 0 15px;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .control-btn.play-pause {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+        }
+
+        .playlist {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .playlist-item {
+            padding: 12px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .playlist-item:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .playlist-item.active {
+            background-color: rgba(255, 255, 255, 0.3);
+            color: #fff;
+        }
+
+        .playlist-item .song-duration {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* 自定义滚动条 */
+        .playlist::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .playlist::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .playlist::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+
+            .cover-container {
+                width: 180px;
+                height: 180px;
+            }
+
+            .control-btn {
+                margin: 0 10px;
+            }
+
+            .playlist-item {
+                padding: 10px 15px;
+            }
         }
     </style>
 </head>
 <body>
-<div id="player-app">
-    <div class="player-container">
-        <h2>音乐播放器</h2>
-        <div class="now-playing" v-if="currentSong">
-            {{ currentSong.name }} - {{ currentSong.artist }}
+<div id="app">
+    <div class="container">
+        <div class="player-header">
+            <h1>音乐播放器</h1>
         </div>
-        <div class="now-playing" v-else>
-            等待播放指令...
+
+        <div class="cover-container" :class="{ 'playing': isPlaying }">
+            <img class="cover-img" :src="currentSong.cover" alt="专辑封面">
         </div>
-        <audio class="audio-controls" controls autoplay></audio>
+
+        <div class="song-info">
+            <div class="song-title">{{ currentSong.title }}</div>
+            <div class="song-artist">{{ currentSong.artist }}</div>
+        </div>
+
+        <div class="progress-container">
+            <el-slider
+                    v-model="progress"
+                    :format-tooltip="formatTime"
+                    @change="seekAudio"
+                    :show-tooltip="false">
+            </el-slider>
+            <div class="time-display">
+                <span>{{ formatTime(currentTime) }}</span>
+                <span>{{ formatTime(currentSong.duration) }}</span>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="control-btn" @click="prevSong">
+                <i class="fas fa-step-backward"></i>
+            </button>
+            <button class="control-btn play-pause" @click="togglePlay">
+                <i :class="isPlaying ? 'fas fa-pause' : 'fas fa-play'"></i>
+            </button>
+            <button class="control-btn" @click="nextSong">
+                <i class="fas fa-step-forward"></i>
+            </button>
+        </div>
+
+        <div class="playlist">
+            <div
+                    v-for="(song, index) in playlist"
+                    :key="index"
+                    class="playlist-item"
+                    :class="{ 'active': currentSongIndex === index }"
+                    @click="playSong(index)">
+                <div>
+                    <span>{{ song.title }}</span> -
+                    <span style="color: rgba(255,255,255,0.6)">{{ song.artist }}</span>
+                </div>
+                <div class="song-duration">{{ formatTime(song.duration) }}</div>
+            </div>
+        </div>
     </div>
+
+    <audio
+            ref="audioPlayer"
+            @timeupdate="updateProgress"
+            @ended="nextSong"
+            :src="currentSong.url">
+        您的浏览器不支持 audio 元素。
+    </audio>
 </div>
 
 <script>
-    const playerApp = new Vue({
-        el: '#player-app',
-        data: {
-            currentSong: null,
-            musicChannel: null
-        },
-        created() {
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                isPlaying: false,
+                currentTime: 0,
+                progress: 0,
+                currentSongIndex: 0,
+                playlist: [
 
-            // 初始化广播频道
-            this.musicChannel = new BroadcastChannel('music_player_channel');
-
-            // 通知主页面本页面已就绪
-            this.musicChannel.postMessage({ type: 'READY' });
-
-            // 监听来自主页面的消息
-            this.musicChannel.addEventListener('message', (event) => {
-                switch (event.data.type) {
-                    case 'PLAY':
-                        this.currentSong = event.data.song;
-                        this.$nextTick(() => {
-                            const audio = document.querySelector('audio');
-                            audio.src = this.currentSong.url;
-                            audio.play();
-                        });
-                        break;
-                    case 'PING':
-                        // 响应存活检测
-                        this.musicChannel.postMessage({ type: 'PONG' });
-                        break;
-                }
-            });
-            console.log("1")
-            // 如果直接访问播放器页面，尝试关闭（可选）
-            if (window.opener === null) {
-                window.close();
+                ]
             }
         },
-        beforeDestroy() {
-            // 清理广播频道
-            if (this.musicChannel) {
-                this.musicChannel.close();
+        computed: {
+            currentSong() {
+                return this.playlist[this.currentSongIndex] || {}
+            }
+        },
+        methods: {
+            togglePlay() {
+                const audio = this.$refs.audioPlayer
+                if (this.isPlaying) {
+                    audio.pause()
+                } else {
+                    audio.play()
+                }
+                this.isPlaying = !this.isPlaying
+            },
+            playSong(index) {
+                this.currentSongIndex = index
+                this.$nextTick(() => {
+                    const audio = this.$refs.audioPlayer
+                    audio.play()
+                    this.isPlaying = true
+                })
+            },
+            prevSong() {
+                this.currentSongIndex = (this.currentSongIndex - 1 + this.playlist.length) % this.playlist.length
+                this.$nextTick(() => {
+                    if (this.isPlaying) {
+                        this.$refs.audioPlayer.play()
+                    }
+                })
+            },
+            nextSong() {
+                this.currentSongIndex = (this.currentSongIndex + 1) % this.playlist.length
+                this.$nextTick(() => {
+                    if (this.isPlaying) {
+                        this.$refs.audioPlayer.play()
+                    }
+                })
+            },
+            updateProgress() {
+                const audio = this.$refs.audioPlayer
+                this.currentTime = audio.currentTime
+                this.progress = (audio.currentTime / this.currentSong.duration) * 100
+            },
+            seekAudio(value) {
+                const audio = this.$refs.audioPlayer
+                audio.currentTime = (value / 100) * this.currentSong.duration
+            },
+            formatTime(seconds) {
+                if (isNaN(seconds)) return '00:00'
+                const mins = Math.floor(seconds / 60)
+                const secs = Math.floor(seconds % 60)
+                return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
             }
         }
-    });
+    })
 </script>
 </body>
 </html>

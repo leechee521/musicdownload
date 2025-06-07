@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.loading = true;
                 this.results = [];
 
-                fetch("/search/" + this.selectedSource + "/" + this.searchQuery + "/" + this.currentPage + "/" + this.pageSize, {
+                fetch("/search/" + this.selectedSource + "/" + this.searchQuery + "/" + 1 + "/" + this.pageSize, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }, 100);
             },
             download(source, id, level) {
-                fetch("/download/api?source=" + source + "&id=" + id + "&level=" + level,{
+                fetch("/download/api?source=" + source + "&id=" + id + "&level=" + level, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -197,6 +197,28 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             toPage(page) {
                 window.location.href = page
+            },
+            loadData() {
+                this.currentPage = this.currentPage + 1
+
+                fetch("/search/" + this.selectedSource + "/" + this.searchQuery + "/" + this.currentPage + "/" + this.pageSize, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }).then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => {
+                            throw err;
+                        });
+                    }
+                    return response.json();
+                }).then(data => {
+                    this.results = this.results.concat(data.data.songs)
+                }).catch(error => {
+                    console.error('Error:', error);
+                }).finally(() => {
+                    this.loading = false;
+                });
             }
         },
         mounted() {
