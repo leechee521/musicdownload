@@ -279,3 +279,27 @@ def parse_url(url, level):
                 path = os.path.join("/", "music", singer, album, name + "." + song_fomart)
                 sg.add_song(singer, name, path)
             sg.save("wyy")
+
+
+def parse_by_id(source, id, level):
+    if 'qq' in source:
+        socketio.emit('downloadApi', {
+             "msg": f"正在下载", "msgtype": "info"
+        })
+        name, album, singer, pic, lyric, music_url, song_fomart = qq_parse_songs(id)
+        download_song_main(name, album, singer, pic, lyric, music_url, song_fomart, None, 0)
+        socketio.emit('downloadApi', {
+            "msg": f"下载成功《{name}-{singer}.{song_fomart}》", "msgtype": "success"
+        })
+        return
+    if "wyy" in source:
+        socketio.emit('downloadApi', {
+            "msg": f"正在下载", "msgtype": "info"
+        })
+        name, album, singer, pic, lyric, music_url, song_fomart, md5_value, size = wyy_parse_songs(id, level)
+        download_song_main(name, album, singer, pic, lyric, music_url, song_fomart, md5_value, size)
+        socketio.emit('downloadApi', {
+            "msg": f"下载成功《{name}-{singer}.{song_fomart}》", "msgtype": "success"
+        })
+        return
+    return

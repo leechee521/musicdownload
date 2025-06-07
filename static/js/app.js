@@ -33,6 +33,26 @@ document.addEventListener('DOMContentLoaded', function () {
             newDownload() {
                 window.location.href = "/download"
             },
+            connectWebSocket() {
+                // 连接WebSocket
+                this.socket = io();
+                this.socket.on('downloadApi', (data) => {
+                    this.$notify({
+                        title: '成功',
+                        message: data.msg,
+                        type: data.msgtype
+                    });
+                });
+
+
+                this.socket.on('connect', () => {
+                    console.log('WebSocket connected');
+                });
+
+                this.socket.on('disconnect', () => {
+                    console.log('WebSocket disconnected');
+                });
+            },
             handleSearch() {
                 if (!this.searchQuery.trim()) {
                     this.$message.warning('请输入搜索内容');
@@ -81,6 +101,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 };
                 return sourceMap[source] || source;
             },
+            getLevel(level) {
+                const sourceMap = {
+                    'standard': '标准品质',
+                    'exhigh': '高品质',
+                    'lossless': '无损品质',
+                };
+                return sourceMap[level] || level;
+            },
             // getBackgroundBySource(source) {
             //     if (source === "wyy") {
             //         return {
@@ -123,8 +151,24 @@ document.addEventListener('DOMContentLoaded', function () {
                     }, 100);
                 }, 100);
             },
-            download(source, id, type_name) {
-                window.location.href = "/download?source=" + source + "&id=" + id + "&type_name=" + type_name
+            download(source, id, level) {
+                fetch("/download/api?source=" + source + "&id=" + id + "&level=" + level,{
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                }).then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => {
+                            throw err;
+                        });
+                    }
+                    return response.json();
+                }).then(data => {
+                    console.log(data)
+                }).catch(error => {
+                    console.error('Error:', error);
+                })
             },
             handleImageError(e) {
                 e.target.src = '../static/images/notFoundImage.png';
@@ -156,6 +200,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         },
         mounted() {
+            this.connectWebSocket();
         }
     })
 })

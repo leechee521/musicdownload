@@ -232,13 +232,13 @@ def wyy_search_song(name, pageSize):
         size = []
         if item.get('l') is not None:
             if item['l'].get('size') is not None:
-                size.append({"type_name": "标准", "size": item['l']["size"]})
+                size.append({"level": "standard", "size": item['l']["size"]})
         if item.get('h') is not None:
             if item['h'].get('size') is not None:
-                size.append({"type_name": "高品", "size": item['h']["size"]})
+                size.append({"level": "exhigh", "size": item['h']["size"]})
         if item.get('sq') is not None:
             if item['sq'].get('size') is not None:
-                size.append({"type_name": "无损", "size": item['sq']["size"]})
+                size.append({"level": "lossless", "size": item['sq']["size"]})
         song_info = {
             'id': item['id'],
             'name': item['name'],

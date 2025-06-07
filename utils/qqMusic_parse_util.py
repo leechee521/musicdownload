@@ -331,8 +331,8 @@ def qq_search_song(name, pageNow: int, pageSize: int):
         song_name = music['songname']
         duration = music['interval']
         pubtime = sft(music['pubtime'])
-        size = [{"type_name": "标准", "size": music['size128']}, {"type_name": "高清", "size": music['size320']},
-                {"type_name": "无损", "size": music['sizeflac']}, ]
+        size = [{"level": "standard", "size": music['size128']}, {"level": "exhigh", "size": music['size320']},
+                {"level": "lossless", "size": music['sizeflac']}, ]
         songs.append({
             "id": songmid,
             "name": song_name,

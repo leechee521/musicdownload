@@ -10,6 +10,7 @@
     <!-- 引入 Vue 和 Element UI JS -->
     <script src="../static/js/vue.js"></script>
     <script src="../static/js/index.js"></script>
+    <script src="../static/js/socket.io.js"></script>
     <!-- 自定义样式 -->
     <link rel="stylesheet" href="../static/css/style.css">
 </head>
@@ -219,10 +220,10 @@
                                 <el-dropdown-menu slot="dropdown">
                                     <el-dropdown-item
                                             v-for="item in row.size"
-                                            @click.native="download(row.source,row.id, item.type_name)"
+                                            @click.native="download(row.source,row.id, item.level)"
                                     >
                                         <div class="download-option">
-                                            <span>{{item.type_name}}</span>
+                                            <span>{{getLevel(item.level)}}</span>
                                             <span>{{formatFileSize(item.size)}}</span>
                                         </div>
                                     </el-dropdown-item>
@@ -288,10 +289,10 @@
                                 <el-dropdown-menu slot="dropdown">
                                     <el-dropdown-item
                                             v-for="size in item.size"
-                                            @click.native="download(item.source,item.id, size.type_name)"
+                                            @click.native="download(item.source,item.id, size.level)"
                                     >
                                         <div class="download-option">
-                                            <span>{{size.type_name}}</span>
+                                            <span>{{getLevel(size.level)}}</span>
                                             <span>{{formatFileSize(size.size)}}</span>
                                         </div>
                                     </el-dropdown-item>
