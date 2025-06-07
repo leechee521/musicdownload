@@ -86,6 +86,8 @@ def parse_url(url, level):
                 name = album = singer = pic = lyric = music_url = song_fomart = None
                 try:
                     name, album, singer, pic, lyric, music_url, song_fomart = qq_parse_songs(song["id"])
+                    path = os.path.join("/", "music", singer, album, name + "." + song_fomart)
+                    sg.add_song(singer, name, path)
                 except Exception as e:
                     name = qq_parse_songs(song["id"])
                     socketio.emit('activities', {
@@ -113,8 +115,6 @@ def parse_url(url, level):
                         "type": 'success',
                         "icon": 'el-icon-download'
                     })
-                    path = os.path.join("/", "music", singer, album, name + "." + song_fomart)
-                    sg.add_song(singer, name, path)
             sg.save("qq")
             return
         # 歌单 处理 /details/的url
@@ -145,6 +145,8 @@ def parse_url(url, level):
                 name = album = singer = pic = lyric = music_url = song_fomart = None
                 try:
                     name, album, singer, pic, lyric, music_url, song_fomart = qq_parse_songs(song["id"])
+                    path = os.path.join("/", "music", singer, album, name + "." + song_fomart)
+                    sg.add_song(singer, name, path)
                 except Exception as e:
                     name = qq_parse_songs(song["id"])
                     socketio.emit('activities', {
@@ -172,8 +174,6 @@ def parse_url(url, level):
                         "type": 'success',
                         "icon": 'el-icon-download'
                     })
-                    path = os.path.join("/", "music", singer, album, name + "." + song_fomart)
-                    sg.add_song(singer, name, path)
             sg.save("qq")
             return
         if 'songmid=' in url:
