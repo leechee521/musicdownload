@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>音乐播放器</title>
+    <link rel="shortcut icon" href="../static/favicon.ico" type="image/x-icon">
+    <!-- 引入 Element UI CSS -->
+    <link rel="stylesheet" href="../static/css/index.css">
+    <!-- 引入 Vue 和 Element UI JS -->
+    <script src="../static/js/vue.js"></script>
+    <script src="../static/js/index.js"></script>
+    <style>
+        .player-container {
+            padding: 20px;
+            text-align: center;
+        }
+        .now-playing {
+            font-size: 1.2em;
+            margin: 20px 0;
+            color: #333;
+        }
+        .audio-controls {
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+<div id="player-app">
+    <div class="player-container">
+        <h2>音乐播放器</h2>
+        <div class="now-playing" v-if="currentSong">
+            {{ currentSong.name }} - {{ currentSong.artist }}
+        </div>
+        <div class="now-playing" v-else>
+            等待播放指令...
+        </div>
+        <audio class="audio-controls" controls autoplay></audio>
+    </div>
+</div>
+
+<script>
+    const playerApp = new Vue({
+        el: '#player-app',
+        data: {
+            currentSong: null,
+            musicChannel: null
+        },
+        created() {
+
+            // 初始化广播频道
+            this.musicChannel = new BroadcastChannel('music_player_channel');
+
+            // 通知主页面本页面已就绪
+            this.musicChannel.postMessage({ type: 'READY' });
+
+            // 监听来自主页面的消息
+            this.musicChannel.addEventListener('message', (event) => {
+                switch (event.data.type) {
+                    case 'PLAY':
+                        this.currentSong = event.data.song;
+                        this.$nextTick(() => {
+                            const audio = document.querySelector('audio');
+                            audio.src = this.currentSong.url;
+                            audio.play();
+                        });
+                        break;
+                    case 'PING':
+                        // 响应存活检测
+                        this.musicChannel.postMessage({ type: 'PONG' });
+                        break;
+                }
+            });
+            console.log("1")
+            // 如果直接访问播放器页面，尝试关闭（可选）
+            if (window.opener === null) {
+                window.close();
+            }
+        },
+        beforeDestroy() {
+            // 清理广播频道
+            if (this.musicChannel) {
+                this.musicChannel.close();
+            }
+        }
+    });
+</script>
+</body>
+</html>

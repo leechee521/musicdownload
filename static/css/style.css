@@ -1,0 +1,216 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", Arial, sans-serif;
+    background-color: #f5f5f5;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.header {
+    background-color: #409EFF;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.header .title {
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 20px; /* 与按钮高度一致 */
+}
+
+.content {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    height: calc(100vh - 290px);
+}
+
+.my_card {
+    margin: 10px 0;
+    border-radius: 1rem;
+}
+
+.my_item_song {
+    margin: 10px 0;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .header .title {
+        font-size: 16px;
+    }
+}
+
+.container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.search-header {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
+}
+
+.mobile-only {
+    display: none;
+}
+
+.desktop-only {
+    display: block;
+}
+
+.music-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.music-artist {
+    font-size: 12px;
+    color: #242424;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.image-error {
+    width: 100%;
+    height: 100%;
+    background: #f5f7fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #c0c4cc;
+}
+
+.el-table .el-tag {
+    margin: 2px;
+    font-size: 12px;
+}
+
+.mobile-card {
+    display: none;
+    background: #fff;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-card-content {
+    display: flex;
+    align-items: center;
+}
+
+.mobile-card-info {
+    flex: 1;
+    margin-left: 10px;
+    overflow: hidden;
+}
+
+.mobile-card-actions {
+    display: flex;
+    margin-top: 8px;
+    justify-content: space-between;
+}
+
+.mobile-card-cover {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+.download-dropdown {
+    margin-left: 5px;
+}
+
+.download-option {
+    display: flex;
+    justify-content: space-between;
+    width: 180px;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .container {
+        padding: 8px;
+    }
+
+    .search-header {
+        padding: 12px;
+    }
+
+    .el-table {
+        display: none;
+    }
+
+    .mobile-card {
+        display: block;
+    }
+
+    .mobile-only {
+        display: block;
+    }
+
+    .desktop-only {
+        display: none;
+    }
+
+    .el-button {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    .el-input__inner {
+        height: 36px;
+        line-height: 36px;
+        font-size: 14px;
+    }
+
+    .el-select .el-input__inner {
+        font-size: 14px;
+    }
+
+    .mobile-card-actions {
+        flex-direction: column;
+    }
+
+    .mobile-card-actions .el-button {
+        width: 100%;
+        margin: 3px 0;
+    }
+
+    .download-dropdown {
+        margin-left: 0;
+        margin-top: 5px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .search-header .el-col {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .search-header .el-row {
+        flex-direction: column;
+    }
+}

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>音乐下载器</title>
+    <link rel="shortcut icon" href="../static/favicon.ico" type="image/x-icon">
+    <!-- 引入 Element UI CSS -->
+    <link rel="stylesheet" href="../static/css/index.css">
+    <!-- 引入 Vue 和 Element UI JS -->
+    <script src="../static/js/vue.js"></script>
+    <script src="../static/js/index.js"></script>
+    <!-- 引入 Socket.IO -->
+    <script src="../static/js/socket.io.js"></script>
+    <!-- 自定义样式 -->
+    <link rel="stylesheet" href="../static/css/dowloadstyle.css">
+</head>
+<body>
+<div id="app">
+    <el-container>
+        <el-header class="header">
+            <el-col :span="4">
+                <el-button @click="toHome" icon="el-icon-s-home" circle></el-button>
+            </el-col>
+            <el-col :span="16" class="header title">
+                音乐下载器
+            </el-col>
+            <el-col :span="4">
+                <el-button @click="showCookieDialog = true" icon="el-icon-setting" circle></el-button>
+            </el-col>
+        </el-header>
+        <el-main class="content">
+            <el-card class="info">
+                <el-scrollbar style="height: calc(100vh - 380px); margin-bottom: 20px">
+                    <el-empty description="暂无任务" v-if="activities.length===0"></el-empty>
+                    <el-timeline class="my_timeline" :reverse="reverse" v-else>
+                        <el-timeline-item
+                                style="margin: 0 -2px 0 2px;width: calc(100% - 20px); "
+                                v-for="(activity, index) in activities"
+                                :key="index"
+                                :icon="activity.icon"
+                                :type="activity.type"
+                                :color="activity.color"
+                                :size="activity.size"
+                                :timestamp="activity.timestamp"
+                                placement="top"
+                        >
+                            <el-card>
+                                {{activity.content}}
+                            </el-card>
+                        </el-timeline-item>
+                    </el-timeline>
+                </el-scrollbar>
+                <el-progress :percentage="progress" :status="progressStatus" :text-inside="true"
+                             :stroke-width="26"></el-progress>
+            </el-card>
+        </el-main>
+        <el-footer height="200px" class="footer">
+            <el-form @submit.native.prevent="submitForm">
+                <el-form-item>
+                    <el-input v-model="songUrl"
+                              placeholder="(支持 网易、qq音乐 单曲和歌单下载)"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-select v-model="quality" placeholder="选择音质" style="width: 100%">
+                        <el-option label="标准品质" value="standard"></el-option>
+                        <el-option label="高品质" value="exhigh"></el-option>
+                        <el-option label="无损品质" value="lossless"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item>
+                    <el-row :gutter="20">
+                        <el-col :span="16">
+                            <el-button type="primary" native-type="submit" style="width: 100%">下载到服务器</el-button>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-button type="success" style="width: 100%">下载到本地</el-button>
+                        </el-col>
+                    </el-row>
+                </el-form-item>
+            </el-form>
+        </el-footer>
+    </el-container>
+    <el-dialog
+            title="修改Cookie"
+            :visible.sync="showCookieDialog"
+            width="80%"
+            class="cookie-dialog">
+        <el-form :model="cookieForm" label-width="80px">
+            <el-form-item label="平台选择">
+                <el-select v-model="cookieForm.platform" placeholder="请选择平台" style="width: 100%">
+                    <el-option label="网易云音乐" value="wyyMusic"></el-option>
+                    <el-option label="QQ音乐" value="qqMusic"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="Cookie值">
+                <el-input
+                        type="textarea"
+                        :rows="4"
+                        placeholder="请输入Cookie值"
+                        v-model="cookieForm.cookie">
+                </el-input>
+            </el-form-item>
+        </el-form>
+        <span slot="footer">
+            <el-button @click="showCookieDialog = false">取 消</el-button>
+            <el-button type="primary" @click="updateCookie">确 定</el-button>
+        </span>
+    </el-dialog>
+</div>
+<script src="../static/js/download.js"></script>
+</body>
+</html>

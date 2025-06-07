@@ -1,0 +1,25 @@
+
+# PyCharm 项目文件
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Python 缓存和编译文件
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 虚拟环境
+venv/
+env/
+ENV/
+.venv/
+
+# 日志文件
+*.log
+*.sqlite
+
+downloads
+temp
+log
