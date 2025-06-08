@@ -26,12 +26,13 @@ document.addEventListener('DOMContentLoaded', function () {
             openSong(song) {
                 if (song.url.startsWith('http')) {
                     window.open(song.url, '_blank'); // 新标签页打开
-                } else {
-                    this.$router.push(song.url); // 单页应用内部跳转
                 }
             },
             newDownload() {
                 window.location.href = "/download"
+            },
+            toDownload(source,id){
+                window.location.href = "/download?source="+source+"&id="+id
             },
             connectWebSocket() {
                 // 连接WebSocket
@@ -137,28 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const i = Math.floor(Math.log(bytes) / Math.log(k));
                 return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
             },
-            async playMusic(item) {
-                if (item.source === "wyy"){
-                    item.url = "http://music.163.com/song/media/outer/url?id="+item.id
-                }
-                if (this.playerWindow == null) {
-                    this.playerWindow = window.open('/player', 'musicPlayer')
-                    setTimeout(() => {
-                        this.playerWindow.postMessage({
-                            type: 'PLAY',
-                            item: item
-                        }, '*')
-                    }, 1000)
-                    // 发送播放请求
-
-                } else {
-                    // 发送播放请求
-                    this.playerWindow.postMessage({
-                        type: 'PLAY',
-                        item: item
-                    }, '*')
-                }
-
+            async downloadMusic(item) {
 
             },
             download(source, id, level) {
@@ -185,6 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             get_top_list(source) {
                 this.card_loading = true
+                this.contentFlat = true
                 fetch("/top_list/" + source, {
                     headers: {
                         'Content-Type': 'application/json',

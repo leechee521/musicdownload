@@ -92,24 +92,37 @@
                                             </el-image>
                                         </el-col>
                                         <el-col :span="8">
-                                            <div class="music-title" @click="openSong(song)">{{ song.title }}</div>
-                                        </el-col>
-                                        <el-col :span="12">
-                                            <div class="music-artist" v-if="song.album !== ''">
-                                                <div>
-                                                    {{ song.artist }}
+                                            <div class="music-title" v-if="song.album !== ''">
+                                                <div @click="openSong(song)">
+                                                    {{ song.title }}
                                                 </div>
                                                 <div>
                                                     {{ song.album }}
                                                 </div>
                                             </div>
                                             <div class="music-artist" v-else>
-                                                <div>
-                                                    {{ song.artist }}
+                                                <div @click="openSong(song)">
+                                                    {{ song.title }}
                                                 </div>
                                                 <div>
                                                     未知专辑
                                                 </div>
+                                            </div>
+                                        </el-col>
+                                        <el-col :span="6">
+                                            {{ song.artist }}
+
+                                        </el-col>
+                                        <el-col :span="6">
+                                            <div>
+                                                <el-button
+                                                        type="success"
+                                                        size="mini"
+                                                        icon="el-icon-download"
+                                                        plain
+                                                        @click="toDownload(song.source,song.id)"
+                                                >下载
+                                                </el-button>
                                             </div>
                                         </el-col>
                                     </el-row>
@@ -123,7 +136,7 @@
                 <!-- 桌面端表格视图 -->
                 <el-table
                         :data="results"
-                        style="width: 100%"
+                        style="width: 100%;padding: 0 10px;"
                         stripe
                         v-loading="loading"
                         empty-text="暂无搜索结果"
@@ -186,6 +199,7 @@
                     <el-table-column
                             label="来源"
                             width="120"
+                            align="center"
                     >
                         <template #default="{ row }">
                             <el-tag :type="getSourceTagType(row.source)" size="small">
@@ -197,38 +211,55 @@
                     <!-- 操作列 -->
                     <el-table-column
                             label="操作"
-                            width="260"
+                            width="300"
                             align="center"
                     >
                         <template #default="{ row }">
-                            <el-button
-                                    type="primary"
-                                    size="mini"
-                                    @click.stop="playMusic(row)"
-                                    icon="el-icon-video-play"
-                                    plain
-                            >播放
-                            </el-button>
-                            <el-dropdown class="download-dropdown">
-                                <el-button
-                                        type="success"
-                                        size="mini"
-                                        icon="el-icon-download"
-                                        plain
-                                >下载<i class="el-icon-arrow-down el-icon--right"></i>
-                                </el-button>
-                                <el-dropdown-menu slot="dropdown">
-                                    <el-dropdown-item
-                                            v-for="item in row.metadata.size"
-                                            @click.native="download(row.source,row.id, item.level)"
-                                    >
-                                        <div class="download-option">
-                                            <span>{{getLevel(item.level)}}</span>
-                                            <span>{{formatFileSize(item.size)}}</span>
-                                        </div>
-                                    </el-dropdown-item>
-                                </el-dropdown-menu>
-                            </el-dropdown>
+                            <el-row style="padding-right:  20px">
+                                <el-col :span="12">
+                                    <el-dropdown class="download-dropdown">
+                                        <el-button
+                                                type="primary"
+                                                size="mini"
+                                                plain
+                                        >下载到本地<i class="el-icon-arrow-down el-icon--right"></i>
+                                        </el-button>
+                                        <el-dropdown-menu slot="dropdown">
+                                            <el-dropdown-item
+                                                    v-for="item in row.metadata.size"
+                                                    @click.native="downloadToLocal(row.source,row.id, item.level)"
+                                            >
+                                                <div class="download-option">
+                                                    <span>{{getLevel(item.level)}}</span>
+                                                    <span>{{formatFileSize(item.size)}}</span>
+                                                </div>
+                                            </el-dropdown-item>
+                                        </el-dropdown-menu>
+                                    </el-dropdown>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-dropdown class="download-dropdown">
+                                        <el-button
+                                                type="success"
+                                                size="mini"
+                                                plain
+                                        >下载到服务器<i class="el-icon-arrow-down el-icon--right"></i>
+                                        </el-button>
+                                        <el-dropdown-menu slot="dropdown">
+                                            <el-dropdown-item
+                                                    v-for="item in row.metadata.size"
+                                                    @click.native="download(row.source,row.id, item.level)"
+                                            >
+                                                <div class="download-option">
+                                                    <span>{{getLevel(item.level)}}</span>
+                                                    <span>{{formatFileSize(item.size)}}</span>
+                                                </div>
+                                            </el-dropdown-item>
+                                        </el-dropdown-menu>
+                                    </el-dropdown>
+
+                                </el-col>
+                            </el-row>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -271,21 +302,33 @@
                             </div>
                         </div>
                         <div class="mobile-card-actions">
-                            <el-button
-                                    type="primary"
-                                    size="mini"
-                                    @click.stop="playMusic(item)"
-                                    icon="el-icon-video-play"
-                                    plain
-                            >播放
-                            </el-button>
+                            <el-dropdown class="download-dropdown" trigger="click">
+                                <el-button
+                                        type="primary"
+                                        size="mini"
+                                        plain
+                                >下载到本地<i class="el-icon-arrow-down el-icon--right"></i>
+                                </el-button>
+                                <el-dropdown-menu slot="dropdown">
+                                    <el-dropdown-item
+                                            v-for="size in item.metadata.size"
+                                            @click.native="downloadToLocal(item.source,item.id, size.level)"
+                                    >
+                                        <div class="download-option">
+                                            <span>{{getLevel(size.level)}}</span>
+                                            <span>{{formatFileSize(size.size)}}</span>
+                                        </div>
+                                    </el-dropdown-item>
+                                </el-dropdown-menu>
+                            </el-dropdown>
+                        </div>
+                        <div class="mobile-card-actions">
                             <el-dropdown class="download-dropdown" trigger="click">
                                 <el-button
                                         type="success"
                                         size="mini"
-                                        icon="el-icon-download"
                                         plain
-                                >下载<i class="el-icon-arrow-down el-icon--right"></i>
+                                >下载到服务器<i class="el-icon-arrow-down el-icon--right"></i>
                                 </el-button>
                                 <el-dropdown-menu slot="dropdown">
                                     <el-dropdown-item
@@ -303,6 +346,7 @@
                     </div>
                 </div>
             </div>
+
         </el-main>
     </el-container>
     <el-drawer

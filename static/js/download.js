@@ -136,21 +136,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 let searchParams = new URLSearchParams(url.search);
                 let source = searchParams.get('source');
                 let id = searchParams.get('id');
-                let type_name = searchParams.get('type_name');
-
                 if (source === 'wyy') {
                     this.songUrl = "https://music.163.com/#/song?id=" + id
                 } else if (source === 'qq') {
                     this.songUrl = "https://y.qq.com/n/ryqq/songDetail/" + id
-                }
-                if (type_name === "标准") {
-                    this.quality = "standard"
-                }
-                if (type_name === "高品") {
-                    this.quality = "exhigh"
-                }
-                if (type_name === "无损") {
-                    this.quality = "lossless"
                 }
             }
         },
