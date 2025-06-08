@@ -142,9 +142,9 @@
                         <template #default="{ row }">
                             <div style="display: flex; align-items: center">
                                 <el-image
-                                        :src="row.cover"
+                                        :src="row.cover_url"
                                         style="width: 50px; height: 50px; border-radius: 4px; flex-shrink: 0"
-                                        :preview-src-list="[row.cover]"
+                                        :preview-src-list="[row.cover_url]"
                                         fit="cover"
                                         @error="handleImageError"
                                 >
@@ -157,11 +157,11 @@
                                 <div style="margin-left: 15px; flex: 1; min-width: 0">
                                     <div class="music-title"
                                          style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
-                                        {{ row.name }}
+                                        {{ row.title }}
                                     </div>
                                     <div class="music-artist"
                                          style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
-                                        {{ row.artists }} · {{ row.album || '未知专辑' }}
+                                        {{ row.artist }} · {{ row.album || '未知专辑' }}
                                     </div>
                                 </div>
                             </div>
@@ -172,7 +172,7 @@
                             prop="pubtime"
                             label="发布时间"
                             width="100"
-                            :formatter="(row) => row.pubtime"
+                            :formatter="(row) => row.metadata.pubtime"
                     ></el-table-column>
                     <!-- 时长列 -->
                     <el-table-column
@@ -219,7 +219,7 @@
                                 </el-button>
                                 <el-dropdown-menu slot="dropdown">
                                     <el-dropdown-item
-                                            v-for="item in row.size"
+                                            v-for="item in row.metadata.size"
                                             @click.native="download(row.source,row.id, item.level)"
                                     >
                                         <div class="download-option">
@@ -253,13 +253,13 @@
                      style="overflow:auto;height: calc(100vh - 220px)">
                     <div v-for="(item, index) in results" :key="index" class="mobile-card">
                         <div class="mobile-card-content">
-                            <img :src="item.cover" class="mobile-card-cover" @error="handleImageError">
+                            <img :src="item.cover_url" class="mobile-card-cover" @error="handleImageError">
                             <div class="mobile-card-info">
-                                <div class="music-title">{{ item.name }}</div>
+                                <div class="music-title">{{ item.title }}</div>
                                 <div class="music-artist" v-if="item.album !== ''">{{ item.artists }} · {{ item.album
                                     }}
                                 </div>
-                                <div class="music-artist" v-else>{{ item.artists }} · 未知专辑</div>
+                                <div class="music-artist" v-else>{{ item.artist }} · 未知专辑</div>
                                 <div style="margin-top: 5px;">
                                     <el-tag :type="getSourceTagType(item.source)" size="mini">
                                         {{ getSourceName(item.source) }}
@@ -289,7 +289,7 @@
                                 </el-button>
                                 <el-dropdown-menu slot="dropdown">
                                     <el-dropdown-item
-                                            v-for="size in item.size"
+                                            v-for="size in item.metadata.size"
                                             @click.native="download(item.source,item.id, size.level)"
                                     >
                                         <div class="download-option">

@@ -2,6 +2,7 @@
 import base64
 import json
 import re
+from datetime import timedelta
 
 import requests
 from flask import current_app
@@ -323,26 +324,23 @@ def qq_search_song(name, pageNow: int, pageSize: int):
     music_list = music_data['data']['song']['list']
     songs = []
     songCount = 0
-    for music in music_list:
-        songmid = music['songmid']
-        singer = music['singer'][0]['name']
-        pic_url = f"https://y.qq.com/music/photo_new/T002R800x800M000{music['albummid']}.jpg?max_age=2592000"
-        album_name = music['albumname']
-        song_name = music['songname']
-        duration = music['interval']
-        pubtime = sft(music['pubtime'])
-        size = [{"level": "standard", "size": music['size128']}, {"level": "exhigh", "size": music['size320']},
-                {"level": "lossless", "size": music['sizeflac']}, ]
-        songs.append({
-            "id": songmid,
-            "name": song_name,
-            "artists": singer,
-            "cover": pic_url,
-            "album": album_name,
-            "duration": duration,
-            "source": "qq",
-            "pubtime": pubtime,
-            "size": size,
-        })
+    for item in music_list:
+        artists = getArtists(item['singer'])
+        cover_url = f"https://y.qq.com/music/photo_new/T002R800x800M000{item['albummid']}.jpg?max_age=2592000"
+        size = [{"level": "standard", "size": item['size128']}, {"level": "exhigh", "size": item['size320']},
+                {"level": "lossless", "size": item['sizeflac']}, ]
+        song = SongInfo(
+            id=item['songmid'],
+            title=item['songname'],
+            artist=artists,
+            album=item['albumname'],
+            duration=item['interval'],
+            source="qq",
+            cover_url=cover_url,
+            url=None,
+            lyric=None,
+            metadata={"pubtime": sft(item['pubtime']), "size": size}
+        )
+        songs.append(song.to_dict())
     data = {"songCount": songCount, "songs": songs}
     return data

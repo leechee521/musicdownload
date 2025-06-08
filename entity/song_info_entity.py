@@ -39,19 +39,6 @@ class SongInfo:
         """初始化后处理"""
         self.metadata = self.metadata or {}
 
-        # 自动生成时长显示
-        if self.duration and not self.metadata.get('duration_str'):
-            self.metadata['duration_str'] = self.format_duration()
-
-    def format_duration(self) -> str:
-        """将时长格式化为 MM:SS """
-        if not self.duration:
-            return "00:00"
-
-        total_seconds = int(self.duration.total_seconds())
-        minutes, seconds = divmod(total_seconds, 60)
-        return f"{minutes:02d}:{seconds:02d}"
-
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> 'SongInfo':
         """从字典创建对象"""
@@ -75,7 +62,7 @@ class SongInfo:
             'title': self.title,
             'artist': self.artist,
             'album': self.album,
-            'duration': self.format_duration(),
+            'duration': self.duration,
             'source': self.source,
             'cover_url': self.cover_url,
             'url': self.url,
@@ -85,4 +72,4 @@ class SongInfo:
 
     def __str__(self) -> str:
         """友好显示"""
-        return f"{self.title} - {self.artist} ({self.format_duration()})"
+        return f"{self.title} - {self.artist} ({self.duration})"

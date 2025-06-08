@@ -12,7 +12,7 @@
     <script src="../static/js/index.js"></script>
     <!-- 引入字体图标 -->
     <link rel="stylesheet" href="../static/css/all.min.css">
-<!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css">-->
+    <!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css">-->
     <style>
         * {
             margin: 0;
@@ -215,7 +215,7 @@
         </div>
 
         <div class="cover-container" :class="{ 'playing': isPlaying }">
-            <img class="cover-img" :src="currentSong.cover" alt="专辑封面">
+            <img class="cover-img" :src="currentSong.cover_url" alt="专辑封面">
         </div>
 
         <div class="song-info">
@@ -282,9 +282,7 @@
                 currentTime: 0,
                 progress: 0,
                 currentSongIndex: 0,
-                playlist: [
-
-                ]
+                playlist: [],
             }
         },
         computed: {
@@ -340,8 +338,30 @@
                 const mins = Math.floor(seconds / 60)
                 const secs = Math.floor(seconds % 60)
                 return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
+            },
+            handleMessage(event) {
+                if (event.data.type === 'PLAY') {
+                    console.log(event.data.item)
+                    this.playlist.push(event.data.item)
+                    const audio = this.$refs.audioPlayer
+
+                    console.log('当前播放列表:', this.playlist)
+                    audio.play().catch(error => {
+                        console.error('播放失败:', error)
+                        alert('由于浏览器限制，请先与页面交互后再播放')
+                    })
+                }
             }
-        }
+        },
+        mounted() {
+            // 设置消息监听
+            window.addEventListener('message', this.handleMessage)
+
+            // 组件销毁时移除监听
+            this.$once('hook:beforeDestroy', () => {
+                window.removeEventListener('message', this.handleMessage)
+            })
+        },
     })
 </script>
 </body>

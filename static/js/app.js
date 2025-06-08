@@ -138,18 +138,28 @@ document.addEventListener('DOMContentLoaded', function () {
                 return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
             },
             async playMusic(item) {
-                // 尝试通过 BroadcastChannel 通知现有标签页
-                const channel = new BroadcastChannel("music_channel");
-                channel.postMessage({type: "PLAY", payload: item});
-
-                // 如果标签页可能被关闭，则重新打开
-                setTimeout(() => {
-                    channel.postMessage({type: "PING"});
+                if (item.source === "wyy"){
+                    item.url = "http://music.163.com/song/media/outer/url?id="+item.id
+                }
+                if (this.playerWindow == null) {
+                    this.playerWindow = window.open('/player', 'musicPlayer')
                     setTimeout(() => {
-                        // 如果未收到响应，说明标签页已关闭
-                        window.open("/player", "_blank"); // 新标签页
-                    }, 100);
-                }, 100);
+                        this.playerWindow.postMessage({
+                            type: 'PLAY',
+                            item: item
+                        }, '*')
+                    }, 1000)
+                    // 发送播放请求
+
+                } else {
+                    // 发送播放请求
+                    this.playerWindow.postMessage({
+                        type: 'PLAY',
+                        item: item
+                    }, '*')
+                }
+
+
             },
             download(source, id, level) {
                 fetch("/download/api?source=" + source + "&id=" + id + "&level=" + level, {

@@ -1,6 +1,7 @@
 # 网易云下载工具类
 import json
 import urllib
+from datetime import timedelta
 from hashlib import md5
 from random import randrange
 
@@ -239,17 +240,19 @@ def wyy_search_song(name, pageSize):
         if item.get('sq') is not None:
             if item['sq'].get('size') is not None:
                 size.append({"level": "lossless", "size": item['sq']["size"]})
-        song_info = {
-            'id': item['id'],
-            'name': item['name'],
-            'artists': '/'.join(artist['name'] for artist in item['ar']),
-            'album': item['al']['name'],
-            'cover': item['al']['picUrl'],
-            'duration': seconds,
-            "pubtime": sft(item['publishTime'] / 1000),
-            "size": size,
-            "source": "wyy"
-        }
-        songs.append(song_info)
+
+        song = SongInfo(
+            id=item['id'],
+            title=item['name'],
+            artist='/'.join(artist['name'] for artist in item['ar']),
+            album=item['al']['name'],
+            duration=seconds,
+            source="wyy",
+            cover_url=item['al']['picUrl'],
+            url=None,
+            lyric=None,
+            metadata={"pubtime": sft(item['publishTime'] / 1000), "size": size}
+        )
+        songs.append(song.to_dict())
     data = {"songCount": songCount, "songs": songs}
     return data
