@@ -5,18 +5,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: leechee_ii/musicdownload:1.1.6
+    image: leechee_ii/musicdownload:1.1.7
     container_name: musicDownload
     restart: always
     ports:
       - 5500:5000
     volumes:
       - /vol1/1000/wyy_music:/app/downloads
-    networks:
-      - my_network
     environment:
       - EVN=production
       - DATABASE_URL=mysql+pymysql://root:Zxc1470.@100.77.166.55/music_download
-networks:
-  my_network:
-    external: true
