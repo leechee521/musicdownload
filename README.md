@@ -55,7 +55,7 @@
 
 1. **克隆项目**
 ```bash
-git clone <repository-url>
+git clone https://github.com/leechee521/musicdownload
 cd music2.0
 ```
 
@@ -79,7 +79,7 @@ python3 app.py
 ```
 
 5. **访问应用**
-打开浏览器访问 http://localhost:5000
+打开浏览器访问 http://localhost:7654
 
 ---
 

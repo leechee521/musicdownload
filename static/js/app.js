@@ -276,26 +276,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (this.player.isLoading) {
                     return;
                 }
-                
+
                 try {
                     this.player.isLoading = true;
-                    
+
                     // 检查歌曲信息
                     if (!song || !song.id || !song.source) {
                         this.$message.error('歌曲信息不完整');
                         return;
                     }
-                    
+
                     // 获取音频URL
                     const audioUrl = await this.getAudioUrl(song);
                     if (!audioUrl) {
                         this.$message.error('获取音频URL失败');
                         return;
                     }
-                    
+
                     // 更新当前歌曲
                     this.player.currentSong = song;
-                    
+
                     // 添加到播放列表（新歌曲排在第一位）
                     const existingIndex = this.player.playList.findIndex(item => item.id === song.id);
                     if (existingIndex !== -1) {
@@ -304,11 +304,40 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     // 将歌曲插入到列表开头
                     this.player.playList.unshift(song);
-                    
+
                     // 设置音频源并播放
                     this.audioElement.src = audioUrl;
                     this.audioElement.play();
                     this.isPlaying = true;
+
+                    // 更新页面标题为当前播放的歌曲信息
+                    document.title = `${song.title} - ${song.artist} | Song Station`;
+
+                    // 设置媒体会话元数据（用于iOS/Android锁屏和通知栏显示）
+                    if ('mediaSession' in navigator) {
+                        navigator.mediaSession.metadata = new MediaMetadata({
+                            title: song.title,
+                            artist: song.artist,
+                            album: song.album || '单曲',
+                            artwork: [
+                                { src: song.cover_url, sizes: '512x512', type: 'image/jpeg' }
+                            ]
+                        });
+
+                        // 设置媒体会话操作处理器
+                        navigator.mediaSession.setActionHandler('play', () => {
+                            this.audioElement.play();
+                        });
+                        navigator.mediaSession.setActionHandler('pause', () => {
+                            this.audioElement.pause();
+                        });
+                        navigator.mediaSession.setActionHandler('previoustrack', () => {
+                            this.playPrevious();
+                        });
+                        navigator.mediaSession.setActionHandler('nexttrack', () => {
+                            this.playNext();
+                        });
+                    }
 
                     this.$message({
                         message: `正在播放: ${song.title}`,
@@ -382,9 +411,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (this.audioElement.paused) {
                     this.audioElement.play();
                     this.isPlaying = true;
+                    // 恢复页面标题为歌曲信息
+                    if (this.player.currentSong) {
+                        document.title = `${this.player.currentSong.title} - ${this.player.currentSong.artist} | Song Station`;
+                    }
                 } else {
                     this.audioElement.pause();
                     this.isPlaying = false;
+                    // 暂停时恢复默认页面标题
+                    document.title = 'Song Station | 极简音乐下载';
+                    // 暂停时清除媒体会话
+                    if ('mediaSession' in navigator) {
+                        navigator.mediaSession.metadata = null;
+                    }
                 }
             },
             
@@ -557,6 +596,12 @@ document.addEventListener('DOMContentLoaded', function () {
             this.audioElement = new Audio();
             this.audioElement.addEventListener('ended', () => {
                 this.isPlaying = false;
+                // 播放结束时恢复默认页面标题
+                document.title = 'Song Station | 极简音乐下载';
+                // 播放结束时清除媒体会话
+                if ('mediaSession' in navigator) {
+                    navigator.mediaSession.metadata = null;
+                }
                 this.playNext();
             });
             this.audioElement.addEventListener('timeupdate', () => {
