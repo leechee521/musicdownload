@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>500 - 服务器错误</title>
+   <link rel="stylesheet" href="../static/css/index.css">
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #f5f7fa;
+            color: #303133;
+        }
+        h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #f56c6c;
+        }
+        p {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>500</h1>
+    <p>服务器内部错误，请稍后再试。</p>
+    <el-button type="primary" @click="goHome">返回首页</el-button>
+
+<script src="../static/js/vue.js"></script>
+<script src="../static/js/index.js"></script>
+    <script>
+        new Vue({
+            el: 'body',
+            methods: {
+                goHome() {
+                    window.location.href = "/home";  // 直接跳转
+                }
+            }
+        });
+    </script>
+</body>
+</html>

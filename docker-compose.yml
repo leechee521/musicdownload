@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: leec521/musicservice:2.0.0
+    container_name: musicservice
+    restart: always
+    ports:
+      - 17600:5000
+    volumes:
+      - /vol2/1000/newMusic:/app/downloads

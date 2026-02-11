@@ -1,0 +1,10 @@
+requests==2.32.3
+Flask==2.2.5
+pillow==10.4.0
+mutagen==1.47.0
+cryptography==42.0.2
+python-dotenv==1.1.0
+Flask-SocketIO==5.5.1
+Flask-SQLAlchemy==3.1.1
+gevent==23.9.1
+gevent-websocket==0.10.0

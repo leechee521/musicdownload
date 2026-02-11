@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>404 - 页面不存在</title>
+    <link rel="stylesheet" href="../static/css/index.css">
+    <style>
+        body {
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #f5f7fa;
+            color: #303133;
+        }
+
+        h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #f56c6c;
+        }
+
+        p {
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+<div id="app1">
+    <h1>404</h1>
+    <p>抱歉，您访问的页面不存在。</p>
+    <el-button type="primary" @click="goHome">返回首页</el-button>
+</div>
+
+<script src="../static/js/vue.js"></script>
+<script src="../static/js/index.js"></script>
+<script>
+    new Vue({
+        el: '#app1',
+        methods: {
+            goHome() {
+                window.location.href = "/home";  // 直接跳转
+            }
+        }
+    });
+</script>
+</body>
+</html>

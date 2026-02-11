@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Song Station | 下载管理</title>
+    <link rel="shortcut icon" href="../static/favicon.ico" type="image/x-icon">
+    <!-- 引入 Element UI CSS -->
+    <link rel="stylesheet" href="../static/css/index.css">
+    <!-- 引入主题样式 -->
+    <link rel="stylesheet" href="../static/css/style.css">
+    <!-- 引入 Vue 和 Element UI JS -->
+    <script src="../static/js/vue.js"></script>
+    <script src="../static/js/index.js"></script>
+    <!-- 引入 Socket.IO -->
+    <script src="../static/js/socket.io.js"></script>
+    <style>
+        /* Download 页面专属样式 */
+        .download-container {
+            min-height: 100vh;
+            background: var(--bg-main);
+            padding: 0;
+        }
+
+        .download-header {
+            background: rgba(18, 18, 18, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 0.5px solid var(--border-light);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .download-brand {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 2px;
+        }
+
+        .download-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .download-main {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 24px;
+        }
+
+        .download-input-section {
+            background: rgba(20, 20, 20, 0.8);
+            border: 0.5px solid var(--border-light);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        .download-input-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+        }
+
+        .download-input-title::before {
+            content: "";
+            width: 4px;
+            height: 18px;
+            background: var(--accent-blue);
+            margin-right: 12px;
+            border-radius: 2px;
+        }
+
+        .download-timeline-section {
+            background: rgba(20, 20, 20, 0.8);
+            border: 0.5px solid var(--border-light);
+            border-radius: 24px;
+            padding: 32px;
+            min-height: 400px;
+        }
+
+        .download-timeline-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+        }
+
+        .download-timeline-title::before {
+            content: "";
+            width: 4px;
+            height: 18px;
+            background: var(--accent-blue);
+            margin-right: 12px;
+            border-radius: 2px;
+        }
+
+        .el-timeline-item__card {
+            background: rgba(255, 255, 255, 0.03) !important;
+            border: 0.5px solid var(--border-light) !important;
+            border-radius: 12px !important;
+            color: var(--text-primary) !important;
+        }
+
+        .el-progress {
+            margin-top: 24px;
+        }
+
+        .el-empty {
+            padding: 60px 0 !important;
+        }
+
+        .el-empty__description {
+            color: var(--text-secondary) !important;
+        }
+
+        @media (max-width: 768px) {
+            .download-header {
+                padding: 16px 20px;
+            }
+
+            .download-main {
+                padding: 0 16px;
+                margin: 24px auto;
+            }
+
+            .download-input-section,
+            .download-timeline-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="download-container">
+            <!-- 顶部导航 -->
+            <div class="download-header">
+                <div class="download-brand">SONG STATION</div>
+                <div class="download-actions">
+                    <el-button @click="toHome" icon="el-icon-back" circle size="small"
+                        class="settings-trigger"></el-button>
+                    <el-button @click="showCookieDialog = true" icon="el-icon-set-up" circle size="small"
+                        class="settings-trigger"></el-button>
+                </div>
+            </div>
+
+            <!-- 主内容区 -->
+            <div class="download-main">
+                <!-- 下载输入区 -->
+                <div class="download-input-section">
+                    <div class="download-input-title">批量下载</div>
+                    <el-form @submit.native.prevent="submitForm">
+                        <el-form-item>
+                            <el-input v-model="songUrl" placeholder="粘贴歌曲或歌单链接（支持网易云、QQ音乐）" size="medium"></el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-select v-model="quality" placeholder="选择音质" style="width: 100%" size="medium">
+                                <el-option label="标准品质" value="standard"></el-option>
+                                <el-option label="高品质" value="exhigh"></el-option>
+                                <el-option label="无损品质" value="lossless"></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item style="margin-bottom: 0">
+                            <el-button type="primary" native-type="submit" style="width: 100%" size="medium">
+                                <i class="el-icon-download" style="margin-right: 8px"></i>开始下载
+                            </el-button>
+                        </el-form-item>
+                    </el-form>
+                </div>
+
+                <!-- 下载进度与日志 -->
+                <div class="download-timeline-section">
+                    <div class="download-timeline-title">下载日志</div>
+                    <el-scrollbar style="height: 350px; margin-bottom: 20px">
+                        <el-empty description="暂无下载任务" v-if="activities.length===0"></el-empty>
+                        <el-timeline :reverse="reverse" v-else>
+                            <el-timeline-item v-for="(activity, index) in activities" :key="index" :icon="activity.icon"
+                                :type="activity.type" :color="activity.color" :size="activity.size"
+                                :timestamp="activity.timestamp" placement="top">
+                                <el-card class="el-timeline-item__card">
+                                    {{activity.content}}
+                                </el-card>
+                            </el-timeline-item>
+                        </el-timeline>
+                    </el-scrollbar>
+                    <el-progress :percentage="progress" :status="progressStatus" :text-inside="true"
+                        :stroke-width="28"></el-progress>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cookie 配置弹窗 -->
+        <el-dialog :visible.sync="showCookieDialog" width="460px" custom-class="glass-dialog" :append-to-body="true"
+            :show-close="false">
+            <div class="custom-close-layer" @click="showCookieDialog = false">
+                <i class="el-icon-close"></i>
+            </div>
+            <div slot="title" class="custom-dialog-header">
+                <span class="title-text">平台配置</span>
+            </div>
+            <el-form label-position="top">
+                <el-form-item label="QQ 音乐 Cookie">
+                    <el-input type="textarea" :rows="4" v-model="cookies.qqMusic"
+                        placeholder="粘贴 QQ 音乐网络请求中的 Cookie"></el-input>
+                </el-form-item>
+                <el-form-item label="网易云音乐 Cookie">
+                    <el-input type="textarea" :rows="4" v-model="cookies.wyyMusic"
+                        placeholder="粘贴网易云音乐网络请求中的 Cookie"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer">
+                <el-button @click="showCookieDialog = false">取消</el-button>
+                <el-button type="primary" @click="saveCookies" :loading="savingCookies">保存配置</el-button>
+            </span>
+        </el-dialog>
+    </div>
+    <script src="../static/js/download.js"></script>
+</body>
+
+</html>
