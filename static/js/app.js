@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 playerWindow: null,
                 searchBarFixed: false,
                 lastScrollTop: 0,
+                currentTopListSource: 'wyy',  // 当前选中的排行榜平台
                 // 播放器相关数据
                 player: {
                     // 播放状态
@@ -39,6 +40,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     // 状态锁
                     isLoading: false
                 },
+                // 歌词相关
+                lyrics: [],
+                currentLyricIndex: -1,
+                showLyrics: false,
                 // HTML5 Audio 元素
                 audioElement: null,
                 // 播放器显示状态
@@ -310,6 +315,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.audioElement.play();
                     this.isPlaying = true;
 
+                    // 获取歌词
+                    this.loadLyrics(song);
+
                     // 更新页面标题为当前播放的歌曲信息
                     document.title = `${song.title} - ${song.artist} | Song Station`;
 
@@ -430,6 +438,9 @@ document.addEventListener('DOMContentLoaded', function () {
             updateProgress() {
                 this.currentTime = this.audioElement.currentTime || 0;
                 this.duration = this.audioElement.duration || 0;
+
+                // 更新歌词高亮
+                this.updateLyricHighlight();
             },
 
             formatTime(seconds) {
@@ -568,7 +579,7 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             handleScroll() {
                 const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                
+
                 // 当内容不是榜单（即搜索结果）时，才启用滚动固定功能
                 if (!this.contentFlat) {
                     // 向下滚动超过200px时，固定搜索框
@@ -583,8 +594,93 @@ document.addEventListener('DOMContentLoaded', function () {
                     // 当显示榜单时，始终取消固定
                     this.searchBarFixed = false;
                 }
-                
+
                 this.lastScrollTop = scrollTop;
+            },
+
+            // 歌词相关方法
+            async loadLyrics(song) {
+                try {
+                    const response = await fetch(`/api/get_lyric?song_id=${song.id}&source=${song.source}`);
+                    const data = await response.json();
+
+                    if (data.lyric) {
+                        this.lyrics = this.parseLyric(data.lyric);
+                    } else {
+                        this.lyrics = [];
+                    }
+                    this.currentLyricIndex = -1;
+                } catch (error) {
+                    console.error('加载歌词失败:', error);
+                    this.lyrics = [];
+                }
+            },
+
+            parseLyric(lyricText) {
+                if (!lyricText) return [];
+
+                const lines = lyricText.split('\n');
+                const lyrics = [];
+                const timeRegex = /\[(\d{2}):(\d{2})\.(\d{2,3})\]/g;
+
+                lines.forEach(line => {
+                    const matches = [...line.matchAll(timeRegex)];
+                    if (matches.length > 0) {
+                        const text = line.replace(timeRegex, '').trim();
+                        if (text) {
+                            matches.forEach(match => {
+                                const minutes = parseInt(match[1]);
+                                const seconds = parseInt(match[2]);
+                                const milliseconds = parseInt(match[3].padEnd(3, '0'));
+                                const time = minutes * 60 + seconds + milliseconds / 1000;
+                                lyrics.push({ time, text });
+                            });
+                        }
+                    }
+                });
+
+                // 按时间排序
+                lyrics.sort((a, b) => a.time - b.time);
+                return lyrics;
+            },
+
+            updateLyricHighlight() {
+                if (this.lyrics.length === 0) return;
+
+                const currentTime = this.currentTime;
+                let index = -1;
+
+                for (let i = 0; i < this.lyrics.length; i++) {
+                    if (currentTime >= this.lyrics[i].time) {
+                        index = i;
+                    } else {
+                        break;
+                    }
+                }
+
+                if (index !== this.currentLyricIndex) {
+                    this.currentLyricIndex = index;
+                    this.scrollLyricToCenter();
+                }
+            },
+
+            scrollLyricToCenter() {
+                this.$nextTick(() => {
+                    const container = this.$el.querySelector('.lyric-container');
+                    const activeLine = this.$el.querySelector('.lyric-line.active');
+
+                    if (container && activeLine) {
+                        const containerHeight = container.clientHeight;
+                        const lineTop = activeLine.offsetTop;
+                        const lineHeight = activeLine.clientHeight;
+                        const scrollTop = lineTop - containerHeight / 2 + lineHeight / 2;
+
+                        container.scrollTo({
+                            top: scrollTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
             }
         },
         mounted() {

@@ -70,7 +70,13 @@
                 <div class="content-grid">
                     <!-- 发现榜单 (首页显示) -->
                     <div v-if="contentFlat">
-                        <div class="section-label">今日推荐榜单</div>
+                        <div class="section-label" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>今日推荐榜单</span>
+                            <el-radio-group v-model="currentTopListSource" size="small" @change="get_top_list(currentTopListSource)">
+                                <el-radio-button label="wyy">网易云</el-radio-button>
+                                <el-radio-button label="qq">QQ音乐</el-radio-button>
+                            </el-radio-group>
+                        </div>
                         <el-row :gutter="24">
                             <el-col :span="6" :md="6" :sm="12" :xs="24" v-for="item in topList" :key="item.title"
                                 style="margin-bottom: 24px">
@@ -306,13 +312,42 @@
                     <span class="time-text">{{ formatTime(duration) }}</span>
                 </div>
 
-                <!-- 播放列表 -->
-                <button @click="showPlaylist = !showPlaylist" class="ctrl-btn list-btn" title="播放列表">
-                    <i class="el-icon-menu"></i>
-                    <span class="list-count" v-if="player.playList.length > 0">{{ player.playList.length }}</span>
-                </button>
+                <!-- 歌词和播放列表按钮 -->
+                <div class="player-actions">
+                    <button @click="showLyrics = !showLyrics" class="ctrl-btn lyric-btn" title="歌词" :class="{ active: showLyrics }">
+                        <i class="el-icon-document"></i>
+                    </button>
+                    <button @click="showPlaylist = !showPlaylist" class="ctrl-btn list-btn" title="播放列表">
+                        <i class="el-icon-menu"></i>
+                        <span class="list-count" v-if="player.playList.length > 0">{{ player.playList.length }}</span>
+                    </button>
+                </div>
             </div>
-            
+
+            <!-- 歌词面板 -->
+            <div class="lyric-panel" v-show="showLyrics">
+                <div class="lyric-header">
+                    <span>歌词</span>
+                    <button @click="showLyrics = false" class="close-btn">
+                        <i class="el-icon-close"></i>
+                    </button>
+                </div>
+                <div class="lyric-container">
+                    <div v-if="lyrics.length === 0" class="empty-lyric">
+                        <i class="el-icon-headset"></i>
+                        <p>暂无歌词</p>
+                    </div>
+                    <div v-else class="lyric-list">
+                        <div v-for="(line, index) in lyrics"
+                             :key="index"
+                             class="lyric-line"
+                             :class="{ active: index === currentLyricIndex }">
+                            {{ line.text }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- 播放列表面板 -->
             <div class="playlist-panel" v-show="showPlaylist">
                 <div class="playlist-header">
@@ -322,8 +357,8 @@
                     </button>
                 </div>
                 <div class="playlist-body">
-                    <div v-for="(song, index) in player.playList" :key="song.id" 
-                         class="playlist-item" 
+                    <div v-for="(song, index) in player.playList" :key="song.id"
+                         class="playlist-item"
                          :class="{ active: player.currentSong?.id === song.id }"
                          @click="playMusic(song)">
                         <img :src="song.cover_url" class="item-cover">

@@ -376,11 +376,11 @@ def get_qq_top_list(id, num):
 
 def qq_search_song(name, pageNow: int, pageSize: int):
     '''
-
-    :param name:
-    :param pageNow:
-    :param pageSize:
-    :return:
+    QQ音乐搜索
+    :param name: 搜索关键词
+    :param pageNow: 当前页码
+    :param pageSize: 每页数量
+    :return: {"songCount": 总数, "songs": 歌曲列表}
     '''
     url = "https://c.y.qq.com/soso/fcgi-bin/client_search_cp"
     data = {
@@ -390,31 +390,60 @@ def qq_search_song(name, pageNow: int, pageSize: int):
     }
     response = requests.get(url, params=data)
     if response.status_code != 200:
-        return
+        return {"songCount": 0, "songs": []}
+
     html = response.text
     music_json = html[9:-1]
-    music_data = json.loads(music_json)  # 转换成 字典
-    music_list = music_data['data']['song']['list']
+
+    try:
+        music_data = json.loads(music_json)
+
+        # 添加响应结构验证
+        if 'data' not in music_data or 'song' not in music_data['data']:
+            current_app.logger.warning(f"QQ音乐搜索响应格式异常: {music_data.keys()}")
+            return {"songCount": 0, "songs": []}
+
+        song_data = music_data['data']['song']
+        music_list = song_data.get('list', [])
+
+        # 从API响应中提取总数（尝试多个可能的字段名）
+        songCount = song_data.get('totalnum', song_data.get('total', song_data.get('curnum', 0)))
+
+        # 添加调试日志（帮助排查问题）
+        if songCount == 0 and len(music_list) > 0:
+            current_app.logger.warning(f"QQ音乐搜索返回歌曲但总数为0，响应字段: {song_data.keys()}")
+
+    except (json.JSONDecodeError, KeyError) as e:
+        current_app.logger.error(f"QQ音乐搜索解析失败: {e}")
+        return {"songCount": 0, "songs": []}
+
     songs = []
-    songCount = 0
     for item in music_list:
-        artists = getArtists(item['singer'])
-        cover_url = f"https://y.qq.com/music/photo_new/T002R800x800M000{item['albummid']}.jpg?max_age=2592000"
-        size = [{"level": "standard", "size": item['size128']}, {"level": "exhigh", "size": item['size320']},
-                {"level": "lossless", "size": item['sizeflac']}, ]
-        song = SongInfo(
-            id=item['songmid'],
-            title=item['songname'],
-            artist=artists,
-            album=item['albumname'],
-            duration=item['interval'],
-            source="qq",
-            cover_url=cover_url,
-            url=None,
-            lyric=None,
-            metadata={"pubtime": sft(item['pubtime']), "size": size}
-        )
-        songs.append(song.to_dict())
+        try:
+            artists = getArtists(item['singer'])
+            cover_url = f"https://y.qq.com/music/photo_new/T002R800x800M000{item['albummid']}.jpg?max_age=2592000"
+            size = [
+                {"level": "standard", "size": item.get('size128', 0)},
+                {"level": "exhigh", "size": item.get('size320', 0)},
+                {"level": "lossless", "size": item.get('sizeflac', 0)},
+            ]
+            song = SongInfo(
+                id=item['songmid'],
+                title=item['songname'],
+                artist=artists,
+                album=item['albumname'],
+                duration=item['interval'],
+                source="qq",
+                cover_url=cover_url,
+                url=None,
+                lyric=None,
+                metadata={"pubtime": sft(item['pubtime']), "size": size}
+            )
+            songs.append(song.to_dict())
+        except (KeyError, TypeError) as e:
+            current_app.logger.warning(f"QQ音乐歌曲解析失败: {e}, item: {item.get('songname', 'unknown')}")
+            continue
+
     data = {"songCount": songCount, "songs": songs}
     return data
 

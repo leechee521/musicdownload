@@ -5,10 +5,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: leec521/musicservice:2.0.0
+    image: leec521/musicservice:2.0.1
     container_name: musicservice
     restart: always
     ports:
-      - 17600:5000
+      - 17600:7654
     volumes:
-      - /vol2/1000/newMusic:/app/downloads
+      - /vol2/1000/music:/app/downloads

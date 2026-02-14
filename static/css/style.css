@@ -1188,6 +1188,97 @@ body::before {
     text-align: center;
 }
 
+/* 播放器操作按钮组 */
+.player-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+/* 歌词按钮 */
+.lyric-btn {
+    position: relative;
+}
+
+.lyric-btn.active {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+}
+
+/* 歌词面板 */
+.lyric-panel {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 0;
+    width: 320px;
+    max-height: 400px;
+    background: rgba(40, 40, 40, 0.98);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    backdrop-filter: blur(20px);
+}
+
+.lyric-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.lyric-container {
+    max-height: 350px;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.empty-lyric {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+}
+
+.empty-lyric i {
+    font-size: 48px;
+    margin-bottom: 12px;
+    display: block;
+    opacity: 0.5;
+}
+
+.empty-lyric p {
+    font-size: 13px;
+    margin: 0;
+}
+
+.lyric-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.lyric-line {
+    font-size: 14px;
+    line-height: 1.8;
+    color: #888;
+    transition: all 0.3s ease;
+    text-align: center;
+    padding: 4px 0;
+}
+
+.lyric-line.active {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    transform: scale(1.05);
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
 /* 播放列表面板 */
 .playlist-panel {
     position: absolute;
@@ -1469,6 +1560,27 @@ body::before {
     .list-btn {
         width: 32px;
         height: 32px;
+    }
+
+    .lyric-panel {
+        width: calc(100% - 20px);
+        left: 10px;
+        right: 10px;
+        bottom: calc(100% + 8px);
+        max-height: 300px;
+    }
+
+    .lyric-container {
+        max-height: 250px;
+        padding: 15px;
+    }
+
+    .lyric-line {
+        font-size: 13px;
+    }
+
+    .lyric-line.active {
+        font-size: 15px;
     }
 
     .playlist-panel {
