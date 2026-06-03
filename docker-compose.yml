@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: leec521/musicservice:2.0.2
+    image: leec521/musicservice:2.0.3
     container_name: musicservice
     restart: always
     ports:
