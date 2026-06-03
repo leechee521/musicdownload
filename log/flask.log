@@ -1,0 +1,156 @@
+[2026-06-02 21:33:53,794] INFO in handler: 127.0.0.1 - - [2026-06-02 21:33:53] "GET / HTTP/1.1" 200 21636 0.003388
+[2026-06-02 21:33:53,873] INFO in handler: 127.0.0.1 - - [2026-06-02 21:33:53] "GET /static/css/css2.css?family=Inter:wght@400;600;700&display=swap HTTP/1.1" 200 7015 0.000671
+[2026-06-02 21:33:53,874] INFO in handler: 127.0.0.1 - - [2026-06-02 21:33:53] "GET /static/css/index.css HTTP/1.1" 200 320315 0.053217
+[2026-06-02 21:33:53,876] INFO in handler: 127.0.0.1 - - [2026-06-02 21:33:53] "GET /static/css/style.css HTTP/1.1" 200 33329 0.000732
+[2026-06-02 21:33:53,879] INFO in handler: 127.0.0.1 - - [2026-06-02 21:33:53] "GET /static/js/vue.js HTTP/1.1" 200 344218 0.002914
+[2026-06-02 21:33:53,882] INFO in handler: 127.0.0.1 - - [2026-06-02 21:33:53] "GET /static/js/socket.io.js HTTP/1.1" 200 185177 0.001074
+[2026-06-02 21:33:53,888] INFO in handler: 127.0.0.1 - - [2026-06-02 21:33:53] "GET /static/js/app.js HTTP/1.1" 200 25473 0.000933
+[2026-06-02 21:33:53,889] INFO in handler: 127.0.0.1 - - [2026-06-02 21:33:53] "GET /static/js/index.js HTTP/1.1" 200 665204 0.011430
+[2026-06-02 21:33:53,957] INFO in handler: 127.0.0.1 - - [2026-06-02 21:33:53] "GET /static/css/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2 HTTP/1.1" 200 48566 0.001040
+[2026-06-02 21:33:53,959] INFO in handler: 127.0.0.1 - - [2026-06-02 21:33:53] "GET /static/css/fonts/element-icons.woff HTTP/1.1" 200 28487 0.001019
+[2026-06-02 21:33:54,002] INFO in handler: 127.0.0.1 - - [2026-06-02 21:33:54] "GET /socket.io/?EIO=4&transport=polling&t=Pw8YctD HTTP/1.1" 200 276 0.000354
+[2026-06-02 21:33:54,009] INFO in handler: 127.0.0.1 - - [2026-06-02 21:33:54] "GET /cookie/get HTTP/1.1" 200 809 0.006606
+[2026-06-02 21:33:54,388] INFO in handler: 127.0.0.1 - - [2026-06-02 21:33:54] "GET /top_list/wyy HTTP/1.1" 200 10276 0.378042
+[2026-06-02 21:33:54,398] INFO in handler: 127.0.0.1 - - [2026-06-02 21:33:54] "GET /static/images/notFoundImage.png HTTP/1.1" 200 6165 0.008621
+[2026-06-02 21:33:54,401] INFO in handler: 127.0.0.1 - - [2026-06-02 21:33:54] "POST /socket.io/?EIO=4&transport=polling&t=Pw8YctP&sid=ZNnFrYL2kDVDzy0IAAAA HTTP/1.1" 200 195 0.001634
+[2026-06-02 21:33:54,402] INFO in handler: 127.0.0.1 - - [2026-06-02 21:33:54] "GET /socket.io/?EIO=4&transport=polling&t=Pw8YctR&sid=ZNnFrYL2kDVDzy0IAAAA HTTP/1.1" 200 189 0.000292
+[2026-06-02 21:33:54,436] INFO in handler: 127.0.0.1 - - [2026-06-02 21:33:54] "GET /socket.io/?EIO=4&transport=polling&t=Pw8Yc-0&sid=ZNnFrYL2kDVDzy0IAAAA HTTP/1.1" 200 157 0.000265
+[2026-06-02 21:33:55,427] INFO in handler: 127.0.0.1 - - [2026-06-02 21:33:55] "GET /static/favicon.ico HTTP/1.1" 200 73923 0.007984
+[2026-06-02 23:28:28,986] WARNING in _internal: Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+[2026-06-02 23:28:28,995] INFO in _internal: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:7654
+ * Running on http://192.168.0.130:7654
+[2026-06-02 23:28:28,996] INFO in _internal: [33mPress CTRL+C to quit[0m
+[2026-06-02 23:28:32,862] WARNING in _internal: Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+[2026-06-02 23:28:32,872] INFO in _internal: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:7654
+ * Running on http://192.168.0.130:7654
+[2026-06-02 23:28:32,872] INFO in _internal: [33mPress CTRL+C to quit[0m
+[2026-06-02 23:28:34,412] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:34] "GET / HTTP/1.1" 200 -
+[2026-06-02 23:28:34,415] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:34] "GET / HTTP/1.1" 200 -
+[2026-06-02 23:28:34,639] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:34] "GET /static/css/style.css HTTP/1.1" 200 -
+[2026-06-02 23:28:34,640] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:34] "GET /static/css/css2.css?family=Inter:wght@400;600;700&display=swap HTTP/1.1" 200 -
+[2026-06-02 23:28:34,645] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:34] "[36mGET /static/css/css2.css?family=Inter:wght@400;600;700&display=swap HTTP/1.1[0m" 304 -
+[2026-06-02 23:28:34,646] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:34] "GET /static/css/index.css HTTP/1.1" 200 -
+[2026-06-02 23:28:34,648] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:34] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+[2026-06-02 23:28:34,652] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:34] "[36mGET /static/css/index.css HTTP/1.1[0m" 304 -
+[2026-06-02 23:28:34,663] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:34] "GET /static/js/app.js HTTP/1.1" 200 -
+[2026-06-02 23:28:34,667] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:34] "GET /static/js/socket.io.js HTTP/1.1" 200 -
+[2026-06-02 23:28:34,670] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:34] "[36mGET /static/js/socket.io.js HTTP/1.1[0m" 304 -
+[2026-06-02 23:28:34,680] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:34] "[36mGET /static/js/app.js HTTP/1.1[0m" 304 -
+[2026-06-02 23:28:34,817] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:34] "GET /static/js/index.js HTTP/1.1" 200 -
+[2026-06-02 23:28:34,820] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:34] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
+[2026-06-02 23:28:34,901] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:34] "GET /static/js/vue.js HTTP/1.1" 200 -
+[2026-06-02 23:28:34,904] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:34] "[36mGET /static/js/vue.js HTTP/1.1[0m" 304 -
+[2026-06-02 23:28:34,990] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:34] "GET /static/css/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2 HTTP/1.1" 200 -
+[2026-06-02 23:28:34,992] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:34] "GET /static/css/fonts/element-icons.woff HTTP/1.1" 200 -
+[2026-06-02 23:28:35,043] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:35] "GET /socket.io/?EIO=4&transport=polling&t=Pw8ysp9 HTTP/1.1" 200 -
+[2026-06-02 23:28:35,045] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:35] "GET /socket.io/?EIO=4&transport=polling&t=Pw8yspB HTTP/1.1" 200 -
+[2026-06-02 23:28:35,048] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:35] "GET /cookie/get HTTP/1.1" 200 -
+[2026-06-02 23:28:35,052] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:35] "[36mGET /static/css/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2 HTTP/1.1[0m" 304 -
+[2026-06-02 23:28:35,053] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:35] "[36mGET /static/css/fonts/element-icons.woff HTTP/1.1[0m" 304 -
+[2026-06-02 23:28:35,057] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:35] "GET /static/images/notFoundImage.png HTTP/1.1" 200 -
+[2026-06-02 23:28:35,058] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:35] "GET /cookie/get HTTP/1.1" 200 -
+[2026-06-02 23:28:35,061] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:35] "POST /socket.io/?EIO=4&transport=polling&t=Pw8yspg&sid=HM1gUdvf3XxkdYymAAAA HTTP/1.1" 200 -
+[2026-06-02 23:28:35,064] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:35] "POST /socket.io/?EIO=4&transport=polling&t=Pw8ysph&sid=fpMa7AY5MvxkjptzAAAB HTTP/1.1" 200 -
+[2026-06-02 23:28:35,067] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:35] "GET /socket.io/?EIO=4&transport=polling&t=Pw8yspi&sid=fpMa7AY5MvxkjptzAAAB HTTP/1.1" 200 -
+[2026-06-02 23:28:35,069] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:35] "GET /socket.io/?EIO=4&transport=polling&t=Pw8yspi&sid=HM1gUdvf3XxkdYymAAAA HTTP/1.1" 200 -
+[2026-06-02 23:28:35,073] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:35] "[36mGET /static/images/notFoundImage.png HTTP/1.1[0m" 304 -
+[2026-06-02 23:28:35,077] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:35] "GET /socket.io/?EIO=4&transport=polling&t=Pw8ysq0&sid=fpMa7AY5MvxkjptzAAAB HTTP/1.1" 200 -
+[2026-06-02 23:28:35,090] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:35] "GET /socket.io/?EIO=4&transport=polling&t=Pw8ysq9&sid=HM1gUdvf3XxkdYymAAAA HTTP/1.1" 200 -
+[2026-06-02 23:28:35,476] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:35] "GET /top_list/wyy HTTP/1.1" 200 -
+[2026-06-02 23:28:35,916] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:35] "GET /top_list/wyy HTTP/1.1" 200 -
+[2026-06-02 23:28:37,785] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:37] "POST /cookie/update HTTP/1.1" 200 -
+[2026-06-02 23:28:37,787] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:37] "POST /cookie/update HTTP/1.1" 200 -
+[2026-06-02 23:28:48,812] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:48] "GET /search/wyy/屋顶/1/20 HTTP/1.1" 200 -
+[2026-06-02 23:28:48,882] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:28:48] "GET /static/css/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa0ZL7SUc.woff2 HTTP/1.1" 200 -
+[2026-06-02 23:29:04,642] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:29:04] "GET /search/qq/屋顶/1/20 HTTP/1.1" 200 -
+[2026-06-02 23:29:05,300] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:29:05] "[36mGET /static/css/index.css HTTP/1.1[0m" 304 -
+[2026-06-02 23:29:05,302] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:29:05] "[36mGET /static/css/css2.css?family=Inter:wght@400;600;700&display=swap HTTP/1.1[0m" 304 -
+[2026-06-02 23:29:05,304] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:29:05] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+[2026-06-02 23:29:05,333] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:29:05] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+[2026-06-02 23:29:05,400] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:29:05] "[33mGET /static/js/socket.io.js.map HTTP/1.1[0m" 404 -
+[2026-06-02 23:29:06,773] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:29:06] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+[2026-06-02 23:29:06,780] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:29:06] "[33mGET /static/js/socket.io.js.map HTTP/1.1[0m" 404 -
+[2026-06-02 23:29:31,714] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:29:31] "GET /search/qq/屋顶/1/20 HTTP/1.1" 200 -
+[2026-06-02 23:30:02,736] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:30:02] "GET /search/qq/屋顶/1/20 HTTP/1.1" 200 -
+[2026-06-02 23:30:15,947] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:30:15] "GET /search/qq/屋顶/1/20 HTTP/1.1" 200 -
+[2026-06-02 23:30:27,426] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:30:27] "GET /search/qq/屋顶/1/20 HTTP/1.1" 200 -
+[2026-06-02 23:31:17,223] WARNING in _internal: Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+[2026-06-02 23:31:17,234] INFO in _internal: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:7654
+ * Running on http://192.168.0.130:7654
+[2026-06-02 23:31:17,234] INFO in _internal: [33mPress CTRL+C to quit[0m
+[2026-06-02 23:31:17,289] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:31:17] "GET /socket.io/?EIO=4&transport=polling&t=Pw8zUAo HTTP/1.1" 200 -
+[2026-06-02 23:31:17,289] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:31:17] "GET /socket.io/?EIO=4&transport=polling&t=Pw8zUAn HTTP/1.1" 200 -
+[2026-06-02 23:31:17,305] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:31:17] "POST /socket.io/?EIO=4&transport=polling&t=Pw8zUQl&sid=7W9uFRpzIFG_bW_VAAAA HTTP/1.1" 200 -
+[2026-06-02 23:31:17,305] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:31:17] "GET /socket.io/?EIO=4&transport=polling&t=Pw8zUQm&sid=7W9uFRpzIFG_bW_VAAAA HTTP/1.1" 200 -
+[2026-06-02 23:31:17,308] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:31:17] "POST /socket.io/?EIO=4&transport=polling&t=Pw8zUQm&sid=HibAiJguTo6-iXRJAAAA HTTP/1.1" 200 -
+[2026-06-02 23:31:17,309] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:31:17] "GET /socket.io/?EIO=4&transport=polling&t=Pw8zUQo&sid=HibAiJguTo6-iXRJAAAA HTTP/1.1" 200 -
+[2026-06-02 23:31:17,325] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:31:17] "GET /socket.io/?EIO=4&transport=polling&t=Pw8zUR9&sid=HibAiJguTo6-iXRJAAAA HTTP/1.1" 200 -
+[2026-06-02 23:31:38,876] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:31:38] "GET /search/qq/屋顶/1/20 HTTP/1.1" 200 -
+[2026-06-02 23:35:40,554] WARNING in _internal: Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+[2026-06-02 23:35:40,566] INFO in _internal: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:7654
+ * Running on http://192.168.0.130:7654
+[2026-06-02 23:35:40,566] INFO in _internal: [33mPress CTRL+C to quit[0m
+[2026-06-02 23:35:40,780] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:35:40] "GET /socket.io/?EIO=4&transport=polling&t=Pw8-UO9 HTTP/1.1" 200 -
+[2026-06-02 23:35:40,780] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:35:40] "GET /socket.io/?EIO=4&transport=polling&t=Pw8-UOA HTTP/1.1" 200 -
+[2026-06-02 23:35:40,795] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:35:40] "POST /socket.io/?EIO=4&transport=polling&t=Pw8-Ulm&sid=UMCLM0BBY2VglS1hAAAA HTTP/1.1" 200 -
+[2026-06-02 23:35:40,797] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:35:40] "POST /socket.io/?EIO=4&transport=polling&t=Pw8-Uln&sid=zkICv_YtjvZ5U8-bAAAA HTTP/1.1" 200 -
+[2026-06-02 23:35:40,797] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:35:40] "GET /socket.io/?EIO=4&transport=polling&t=Pw8-Uln&sid=UMCLM0BBY2VglS1hAAAA HTTP/1.1" 200 -
+[2026-06-02 23:35:40,799] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:35:40] "GET /socket.io/?EIO=4&transport=polling&t=Pw8-Ulp&sid=zkICv_YtjvZ5U8-bAAAA HTTP/1.1" 200 -
+[2026-06-02 23:35:40,811] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:35:40] "GET /socket.io/?EIO=4&transport=polling&t=Pw8-Um4&sid=zkICv_YtjvZ5U8-bAAAA HTTP/1.1" 200 -
+[2026-06-02 23:36:00,582] ERROR in qqMusic_parse_util: QQ音乐搜索解析失败: Extra data: line 1 column 2 (char 1)
+[2026-06-02 23:36:06,216] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:36:06] "GET /search/qq/屋顶/1/20 HTTP/1.1" 200 -
+[2026-06-02 23:40:44,152] WARNING in _internal: Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+[2026-06-02 23:40:44,165] INFO in _internal: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:7654
+ * Running on http://192.168.0.130:7654
+[2026-06-02 23:40:44,165] INFO in _internal: [33mPress CTRL+C to quit[0m
+[2026-06-02 23:40:44,279] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:44] "GET /socket.io/?EIO=4&transport=polling&t=Pw8_ec8 HTTP/1.1" 200 -
+[2026-06-02 23:40:44,282] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:44] "GET /socket.io/?EIO=4&transport=polling&t=Pw8_ec8 HTTP/1.1" 200 -
+[2026-06-02 23:40:44,298] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:44] "POST /socket.io/?EIO=4&transport=polling&t=Pw8_er-&sid=0Q49Sxdtum1TdHeEAAAA HTTP/1.1" 200 -
+[2026-06-02 23:40:44,301] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:44] "GET /socket.io/?EIO=4&transport=polling&t=Pw8_es0&sid=0Q49Sxdtum1TdHeEAAAA HTTP/1.1" 200 -
+[2026-06-02 23:40:44,304] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:44] "POST /socket.io/?EIO=4&transport=polling&t=Pw8_es1&sid=9C3VkVr545MjqqlHAAAB HTTP/1.1" 200 -
+[2026-06-02 23:40:44,305] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:44] "GET /socket.io/?EIO=4&transport=polling&t=Pw8_es4&sid=9C3VkVr545MjqqlHAAAB HTTP/1.1" 200 -
+[2026-06-02 23:40:44,316] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:44] "GET /socket.io/?EIO=4&transport=polling&t=Pw8_esM&sid=0Q49Sxdtum1TdHeEAAAA HTTP/1.1" 200 -
+[2026-06-02 23:40:44,321] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:44] "GET /socket.io/?EIO=4&transport=polling&t=Pw8_esQ&sid=9C3VkVr545MjqqlHAAAB HTTP/1.1" 200 -
+[2026-06-02 23:40:52,217] WARNING in _internal: Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+[2026-06-02 23:40:52,226] INFO in _internal: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:7654
+ * Running on http://192.168.0.130:7654
+[2026-06-02 23:40:52,227] INFO in _internal: [33mPress CTRL+C to quit[0m
+[2026-06-02 23:40:52,281] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:52] "GET /socket.io/?EIO=4&transport=polling&t=Pw8_gZ9 HTTP/1.1" 200 -
+[2026-06-02 23:40:52,282] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:52] "GET /socket.io/?EIO=4&transport=polling&t=Pw8_gZ8 HTTP/1.1" 200 -
+[2026-06-02 23:40:52,304] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:52] "POST /socket.io/?EIO=4&transport=polling&t=Pw8_gp2&sid=_4BZ7wK3SK1FGHCgAAAA HTTP/1.1" 200 -
+[2026-06-02 23:40:52,306] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:52] "POST /socket.io/?EIO=4&transport=polling&t=Pw8_gp3&sid=zSYOUABvCq5GgL_vAAAA HTTP/1.1" 200 -
+[2026-06-02 23:40:52,307] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:52] "GET /socket.io/?EIO=4&transport=polling&t=Pw8_gp3&sid=_4BZ7wK3SK1FGHCgAAAA HTTP/1.1" 200 -
+[2026-06-02 23:40:52,308] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:52] "GET /socket.io/?EIO=4&transport=polling&t=Pw8_gp4&sid=zSYOUABvCq5GgL_vAAAA HTTP/1.1" 200 -
+[2026-06-02 23:40:52,319] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:52] "GET /socket.io/?EIO=4&transport=polling&t=Pw8_gpR&sid=zSYOUABvCq5GgL_vAAAA HTTP/1.1" 200 -
+[2026-06-02 23:40:55,496] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:55] "GET /socket.io/?EIO=4&transport=websocket&sid=zSYOUABvCq5GgL_vAAAA HTTP/1.1" 200 -
+[2026-06-02 23:40:55,521] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:55] "GET / HTTP/1.1" 200 -
+[2026-06-02 23:40:55,861] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:55] "[36mGET /static/css/index.css HTTP/1.1[0m" 304 -
+[2026-06-02 23:40:55,865] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:55] "[36mGET /static/js/app.js HTTP/1.1[0m" 304 -
+[2026-06-02 23:40:55,870] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:55] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+[2026-06-02 23:40:55,874] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:55] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+[2026-06-02 23:40:55,876] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:55] "[36mGET /static/js/index.js HTTP/1.1[0m" 304 -
+[2026-06-02 23:40:55,889] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:55] "[36mGET /static/css/css2.css?family=Inter:wght@400;600;700&display=swap HTTP/1.1[0m" 304 -
+[2026-06-02 23:40:55,891] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:55] "[36mGET /static/js/socket.io.js HTTP/1.1[0m" 304 -
+[2026-06-02 23:40:55,894] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:55] "[36mGET /static/js/vue.js HTTP/1.1[0m" 304 -
+[2026-06-02 23:40:55,950] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:55] "[36mGET /static/css/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2 HTTP/1.1[0m" 304 -
+[2026-06-02 23:40:55,952] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:55] "[36mGET /static/css/fonts/element-icons.woff HTTP/1.1[0m" 304 -
+[2026-06-02 23:40:55,963] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:55] "[33mGET /static/js/socket.io.js.map HTTP/1.1[0m" 404 -
+[2026-06-02 23:40:55,974] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:55] "GET /socket.io/?EIO=4&transport=polling&t=Pw8_hiX HTTP/1.1" 200 -
+[2026-06-02 23:40:56,017] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:56] "[36mGET /static/images/notFoundImage.png HTTP/1.1[0m" 304 -
+[2026-06-02 23:40:56,025] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:56] "POST /socket.io/?EIO=4&transport=polling&t=Pw8_hj2&sid=taoNCwPE7omrTR8HAAAE HTTP/1.1" 200 -
+[2026-06-02 23:40:56,026] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:56] "GET /cookie/get HTTP/1.1" 200 -
+[2026-06-02 23:40:56,029] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:56] "GET /socket.io/?EIO=4&transport=polling&t=Pw8_hj3&sid=taoNCwPE7omrTR8HAAAE HTTP/1.1" 200 -
+[2026-06-02 23:40:56,052] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:56] "GET /static/favicon.ico HTTP/1.1" 200 -
+[2026-06-02 23:40:56,469] INFO in _internal: 127.0.0.1 - - [02/Jun/2026 23:40:56] "GET /top_list/wyy HTTP/1.1" 200 -

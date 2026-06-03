@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Song Station | 极简音乐下载</title>
+    <link rel="shortcut icon" href="../static/favicon.ico" type="image/x-icon">
+    <!-- UI 框架预设 -->
+    <link rel="stylesheet" href="../static/css/index.css">
+    <!-- 字体预设 -->
+        <link href="../static/css/css2.css?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- 框架资源 -->
+    <script src="../static/js/vue.js"></script>
+    <script src="../static/js/index.js"></script>
+    <script src="../static/js/socket.io.js"></script>
+    
+    <!-- 重写后的样式层 -->
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+
+<body>
+    <div id="app">
+        <el-container>
+            <!-- 胶囊式导航栏 -->
+            <el-header>
+                <div class="header-inner">
+                    <div class="brand-title">SONG STATION</div>
+                    <div class="header-actions">
+                        <el-button @click="toDownloadPage" icon="el-icon-download" circle size="small"
+                            class="settings-trigger" title="批量下载"></el-button>
+                        <el-button @click="settingsVisible = true" icon="el-icon-set-up" circle size="small"
+                            class="settings-trigger" title="平台配置"></el-button>
+                    </div>
+                </div>
+            </el-header>
+
+            <el-main>
+                <!-- 垂直英雄区域 -->
+                <div class="hero-section">
+                    <h1 class="hero-title">探索 纯净音质</h1>
+                    <p class="hero-subtitle">发现、预览并下载全网无损音乐资源</p>
+
+                    <div class="search-bar-wrap" :class="{ 'fixed': searchBarFixed }">
+                        <el-select v-model="selectedSource" placeholder="平台" style="width: 120px;" size="medium">
+                            <el-option v-for="item in sources" :key="item.value" :label="item.label"
+                                :value="item.value"></el-option>
+                        </el-select>
+                        <el-input placeholder="输入歌曲名、歌手或专辑..." v-model="searchQuery" @keyup.enter.native="handleSearch"
+                            style="flex: 1"></el-input>
+                        <el-button type="primary" icon="el-icon-search" @click="handleSearch"
+                            size="medium">搜索</el-button>
+                    </div>
+                </div>
+                
+                <!-- 固定搜索框容器 -->
+                <div v-if="searchBarFixed" class="fixed-search-bar-container">
+                    <div class="search-bar-wrap">
+                        <el-select v-model="selectedSource" placeholder="平台" style="width: 120px;" size="medium">
+                            <el-option v-for="item in sources" :key="item.value" :label="item.label"
+                                :value="item.value"></el-option>
+                        </el-select>
+                        <el-input placeholder="输入歌曲名、歌手或专辑..." v-model="searchQuery" @keyup.enter.native="handleSearch"
+                            style="flex: 1"></el-input>
+                        <el-button type="primary" icon="el-icon-search" @click="handleSearch"
+                            size="medium">搜索</el-button>
+                    </div>
+                </div>
+
+                <div class="content-grid">
+                    <!-- 发现榜单 (首页显示) -->
+                    <div v-if="contentFlat">
+                        <div class="section-label" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span>今日推荐榜单</span>
+                            <el-radio-group v-model="currentTopListSource" size="small" @change="get_top_list(currentTopListSource)">
+                                <el-radio-button label="wyy">网易云</el-radio-button>
+                                <el-radio-button label="qq">QQ音乐</el-radio-button>
+                            </el-radio-group>
+                        </div>
+                        <el-row :gutter="24">
+                            <el-col :span="6" :md="6" :sm="12" :xs="24" v-for="item in topList" :key="item.title"
+                                style="margin-bottom: 24px">
+                                <el-card class="music-card" :body-style="{ padding: '16px' }">
+                                    <div slot="header"
+                                        style="display: flex; justify-content: space-between; align-items: center">
+                                        <b style="font-size: 14px">{{item.title}}</b>
+                                        <el-button type="text" size="mini"
+                                            @click="loadMoreSongs(item)">更多</el-button>
+                                    </div>
+                                    <div style="max-height: 300px; overflow-y: auto;">
+                                        <div v-for="song in item.songs" :key="song.id" class="song-row"
+                                            style="cursor: pointer"
+                                            @click="playMusic(song)">
+                                            <el-row type="flex" align="middle">
+                                                <el-image :src="song.cover_url"
+                                                    style="width: 40px; height: 40px; border-radius: 8px; flex-shrink:0; cursor: pointer"
+                                                    fit="cover"
+                                                    @click.native.stop="playMusic(song)"></el-image>
+                                                <div style="margin-left: 12px; flex:1; min-width:0" class="song-info">
+                                                    <div class="name"
+                                                        style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                                        {{song.title}}</div>
+                                                    <div class="meta" style="cursor: pointer"
+                                                        @click.stop="searchQuery = song.artist; handleSearch()">
+                                                        {{song.artist}}
+                                                    </div>
+                                                </div>
+                                                <el-button type="text" icon="el-icon-download"
+                                                    @click.stop="toDownload(song.source,song.id)"></el-button>
+                                            </el-row>
+                                        </div>
+                                    </div>
+                                </el-card>
+                            </el-col>
+                        </el-row>
+                    </div>
+
+                    <!-- 搜索结果或榜单详情 (搜索后显示) -->
+                    <div v-show="!contentFlat">
+                        <div class="section-label">{{ sectionTitle }}</div>
+                        <!-- 响应式布局：桌面端使用表格，手机端使用卡片 -->
+                        
+                        <!-- 手机端卡片布局 -->
+                        <div class="mobile-content">
+                            <!-- 歌曲卡片列表 -->
+                            <div v-for="row in results" :key="row.id" class="mobile-song-card">
+                                <!-- 卡片头部：封面和基本信息 -->
+                                <div class="mobile-card-header">
+                                    <el-image :src="row.cover_url"
+                                        style="width: 60px; height: 60px; border-radius: 12px; flex-shrink: 0; cursor: pointer" fit="cover"
+                                        @error="handleImageError"
+                                        @click.native="playMusic(row)"></el-image>
+                                    <div style="margin-left: 12px; flex: 1; min-width: 0">
+                                        <div class="mobile-card-title">{{ row.title }}</div>
+                                        <div class="mobile-card-artist">{{ row.artist }}</div>
+                                        <div class="mobile-card-album">{{ row.album || '单曲' }}</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 卡片底部：来源和下载按钮 -->
+                                <div class="mobile-card-footer">
+                                    <el-tag size="mini" effect="plain" class="mobile-card-source">
+                                        {{ getSourceName(row.source) }}
+                                    </el-tag>
+                                    <div class="mobile-card-download">
+                                        <el-dropdown trigger="click" size="small">
+                                            <el-button type="primary" size="small">
+                                                下载<i class="el-icon-arrow-down el-icon--right"></i>
+                                            </el-button>
+                                            <el-dropdown-menu slot="dropdown">
+                                                <el-dropdown-item v-for="item in row.metadata.size" :key="item.level"
+                                                    @click.native="download(row.source,row.id, item.level)">
+                                                    {{getLevel(item.level)}} ({{formatFileSize(item.size)}})
+                                                </el-dropdown-item>
+                                            </el-dropdown-menu>
+                                        </el-dropdown>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- 空状态 -->
+                            <div v-if="results.length === 0" class="mobile-empty">
+                                <div class="mobile-empty-icon">🎵</div>
+                                <div class="mobile-empty-text">未找到相关结果</div>
+                            </div>
+                            
+                            <!-- 手机端分页组件 -->
+                            <div v-if="results.length > 0" class="mobile-pagination">
+                                <div class="mobile-pagination-info">
+                                    共 {{ total }} 首歌曲
+                                </div>
+                                <div class="mobile-pagination-buttons">
+                                    <el-button size="small" :disabled="currentPage === 1" @click="handlePageChange(currentPage - 1)">
+                                        上一页
+                                    </el-button>
+                                    <span class="mobile-pagination-current">
+                                        {{ currentPage }} / {{ Math.ceil(total / pageSize) }}
+                                    </span>
+                                    <el-button size="small" :disabled="currentPage >= Math.ceil(total / pageSize)" @click="handlePageChange(currentPage + 1)">
+                                        下一页
+                                    </el-button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 桌面端表格布局 -->
+                        <div class="desktop-content">
+                            <el-table :data="results" style="width: 100%" v-loading="loading" empty-text="未找到相关结果">
+                                <el-table-column label="封面" width="80">
+                                    <template #default="{ row }">
+                                        <el-image :src="row.cover_url"
+                                            style="width: 48px; height: 48px; border-radius: 10px; cursor: pointer" fit="cover"
+                                            @error="handleImageError"
+                                            @click.native="playMusic(row)"></el-image>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="歌曲信息" min-width="180">
+                                    <template #default="{ row }">
+                                        <div class="name" style="font-weight:600">{{ row.title }}</div>
+                                        <div style="font-size:12px; color:var(--text-secondary)">{{ row.artist }}</div>
+                                        <div style="font-size:12px; color:var(--text-secondary)">{{ row.album || '单曲' }}
+                                        </div>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="时长/来源" width="120">
+                                    <template #default="{ row }">
+                                        <div>{{ formatDuration(row.duration) }}</div>
+                                        <el-tag size="mini" effect="plain">{{ getSourceName(row.source) }}</el-tag>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column label="操作" width="120" align="center">
+                                    <template #default="{ row }">
+                                        <el-dropdown trigger="click">
+                                            <el-button type="primary" size="mini" plain round>下载</el-button>
+                                            <el-dropdown-menu slot="dropdown">
+                                                <el-dropdown-item v-for="item in row.metadata.size" :key="item.level"
+                                                    @click.native="download(row.source,row.id, item.level)">
+                                                    {{getLevel(item.level)}} ({{formatFileSize(item.size)}})
+                                                </el-dropdown-item>
+                                            </el-dropdown-menu>
+                                        </el-dropdown>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                            
+                            <!-- 桌面端分页组件 -->
+                            <div v-if="results.length > 0" style="margin-top: 24px; text-align: center;">
+                                <el-pagination background layout="prev, pager, next, total" :total="total"
+                                    :page-size="pageSize" :current-page.sync="currentPage"
+                                    @current-change="handlePageChange">
+                                </el-pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </el-main>
+        </el-container>
+
+        <!-- 全中文设置窗 (自定义 Title Slot) -->
+        <el-dialog :visible.sync="settingsVisible" width="460px" custom-class="glass-dialog" :append-to-body="true"
+            :show-close="false">
+            <div class="custom-close-layer" @click="settingsVisible = false">
+                <i class="el-icon-close"></i>
+            </div>
+            <div slot="title" class="custom-dialog-header">
+                <span class="title-text">平台配置</span>
+            </div>
+            <el-form label-position="top">
+                <el-form-item label="QQ 音乐 Cookie">
+                    <el-input type="textarea" :rows="4" v-model="cookies.qqMusic"
+                        placeholder="粘贴 QQ 音乐网络请求中的 Cookie"></el-input>
+                </el-form-item>
+                <el-form-item label="网易云音乐 Cookie">
+                    <el-input type="textarea" :rows="4" v-model="cookies.wyyMusic"
+                        placeholder="粘贴网易云音乐网络请求中的 Cookie"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer">
+                <el-button @click="settingsVisible = false" size="medium">关闭</el-button>
+                <el-button type="primary" @click="saveCookies" :loading="savingCookies" size="medium">保存配置</el-button>
+            </div>
+        </el-dialog>
+       
+        <!-- 音乐播放器 -->
+        <div class="music-player" v-show="player.currentSong">
+            <!-- 移动端进度条（在播放器外部顶部） -->
+            <div class="mobile-progress-box">
+                <div class="progress-bar" @click="seekTo($event)">
+                    <div class="progress-fill" :style="{ width: progressPercent + '%' }"></div>
+                </div>
+                <div class="mobile-time-row">
+                    <span class="time-text">{{ formatTime(currentTime) }}</span>
+                    <span class="time-text">{{ formatTime(duration) }}</span>
+                </div>
+            </div>
+
+            <div class="player-main">
+                <!-- 歌曲信息 -->
+                <div class="song-info">
+                    <div class="song-cover-wrapper" @click="togglePlay">
+                        <img :src="player.currentSong?.cover_url || '../static/images/notFoundImage.png'" class="song-cover">
+                        <div class="cover-overlay" :class="{ 'is-playing': isPlaying }">
+                            <i :class="isPlaying ? 'el-icon-video-pause' : 'el-icon-video-play'"></i>
+                        </div>
+                    </div>
+                    <div class="song-text">
+                        <div class="song-name">{{ player.currentSong?.title || '未播放' }}</div>
+                        <div class="song-artist">{{ player.currentSong?.artist || '请选择歌曲' }}</div>
+                    </div>
+                </div>
+
+                <!-- 控制按钮 -->
+                <div class="control-btns">
+                    <button @click="playPrevious" class="ctrl-btn" title="上一首">
+                        <i class="el-icon-arrow-left"></i>
+                    </button>
+                    <!-- 桌面端显示播放按钮 -->
+                    <button @click="togglePlay" class="ctrl-btn play-btn desktop-only" title="播放/暂停">
+                        <i :class="isPlaying ? 'el-icon-video-pause' : 'el-icon-video-play'"></i>
+                    </button>
+                    <button @click="playNext" class="ctrl-btn" title="下一首">
+                        <i class="el-icon-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- 桌面端进度条 -->
+                <div class="progress-box desktop-progress">
+                    <span class="time-text">{{ formatTime(currentTime) }}</span>
+                    <div class="progress-bar" @click="seekTo($event)">
+                        <div class="progress-fill" :style="{ width: progressPercent + '%' }"></div>
+                    </div>
+                    <span class="time-text">{{ formatTime(duration) }}</span>
+                </div>
+
+                <!-- 播放列表 -->
+                <button @click="showPlaylist = !showPlaylist" class="ctrl-btn list-btn" title="播放列表">
+                    <i class="el-icon-menu"></i>
+                    <span class="list-count" v-if="player.playList.length > 0">{{ player.playList.length }}</span>
+                </button>
+            </div>
+            
+            <!-- 播放列表面板 -->
+            <div class="playlist-panel" v-show="showPlaylist">
+                <div class="playlist-header">
+                    <span>播放列表 ({{ player.playList.length }})</span>
+                    <button @click="showPlaylist = false" class="close-btn">
+                        <i class="el-icon-close"></i>
+                    </button>
+                </div>
+                <div class="playlist-body">
+                    <div v-for="(song, index) in player.playList" :key="song.id" 
+                         class="playlist-item" 
+                         :class="{ active: player.currentSong?.id === song.id }"
+                         @click="playMusic(song)">
+                        <img :src="song.cover_url" class="item-cover">
+                        <div class="item-info">
+                            <div class="item-title">{{ song.title }}</div>
+                            <div class="item-artist">{{ song.artist }}</div>
+                        </div>
+                        <button @click.stop="removeFromPlaylist(index)" class="remove-btn">
+                            <i class="el-icon-delete"></i>
+                        </button>
+                    </div>
+                    <div v-if="player.playList.length === 0" class="empty-tip">
+                        播放列表为空
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="../static/js/app.js"></script>
+</body>
+
+</html>
